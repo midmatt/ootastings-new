@@ -123,7 +123,7 @@ export default function BriefAffordance({
         aria-label={`${name} summary`}
         {...hover}
         onClick={(e) => e.stopPropagation()}
-        className={`bg-cream rounded-card absolute bottom-0 z-30 max-h-full origin-bottom overflow-y-auto p-6 pb-20 shadow-[0_28px_60px_-20px_rgba(15,20,5,0.6)] transition-all duration-250 ease-[var(--ease-brand)] ${panelClass} ${
+        className={`bg-cream rounded-card absolute bottom-0 z-30 max-h-full origin-bottom p-6 pb-20 shadow-[0_28px_60px_-20px_rgba(15,20,5,0.6)] transition-all duration-250 ease-[var(--ease-brand)] ${panelClass} ${
           enabled && open
             ? "pointer-events-auto scale-100 opacity-100"
             : "pointer-events-none scale-95 opacity-0"

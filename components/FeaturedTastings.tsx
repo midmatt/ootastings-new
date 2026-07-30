@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import PlaceholderImage from "./PlaceholderImage";
 import BriefAffordance from "./BriefAffordance";
+import ExpandedDetail from "./ExpandedDetail";
 import { featuredTastings } from "@/lib/placeholders";
 
 /**
@@ -53,7 +54,6 @@ export default function FeaturedTastings() {
   const seq = useRef(0);
   const touch = useRef<{ x: number; y: number } | null>(null);
   const stage = useRef<HTMLDivElement>(null);
-  const panel = useRef<HTMLDivElement>(null);
 
   const current = featuredTastings[active];
 
@@ -94,22 +94,6 @@ export default function FeaturedTastings() {
     const t = setTimeout(() => go(1), AUTOPLAY_MS);
     return () => clearTimeout(t);
   }, [hovered, expanded, motionOk, go]);
-
-  // Bring the panel into frame, leaving room for the sticky header and the
-  // panel's own close button.
-  useEffect(() => {
-    if (!expanded || !panel.current) return;
-    const top = panel.current.getBoundingClientRect().top;
-    window.scrollTo({ top: window.scrollY + top - 116, behavior: "smooth" });
-  }, [expanded]);
-
-  // Escape closes the detail panel.
-  useEffect(() => {
-    if (!expanded) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && closeExpanded();
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [expanded]);
 
   /** Signed slot: 0 centre, 1 right, -1 left. */
   const slotOf = (i: number) => {
@@ -332,97 +316,57 @@ export default function FeaturedTastings() {
             })}
 
             {/* ---------- expanded detail panel ---------- */}
-            <div
-              ref={panel}
-              aria-hidden={!expanded}
-              className={`col-start-1 row-start-1 z-40 w-[min(72rem,92vw)] transition-all duration-340 ease-[var(--ease-brand)] ${
-                expanded
-                  ? "scale-100 opacity-100"
-                  : "pointer-events-none scale-95 opacity-0"
-              }`}
+            <ExpandedDetail
+              open={expanded}
+              onClose={closeExpanded}
+              image={current.image}
+              index={active}
+              badge={current.duration}
+              name={current.name}
+              brief={current.brief}
+              className="col-start-1 row-start-1"
             >
-              <div className="bg-cream rounded-card shadow-lift relative grid max-h-[86vh] overflow-x-hidden overflow-y-auto md:max-h-none md:grid-cols-[minmax(0,44%)_1fr] md:overflow-hidden">
-                <div className="relative h-44 sm:h-56 md:h-auto md:min-h-[30rem]">
-                  <PlaceholderImage
-                    src={current.image.src}
-                    alt={current.image.alt}
-                    fill
-                    sizes="(max-width: 768px) 92vw, 32rem"
-                    className="object-cover"
-                  />
-                  <div className="from-olive-deep/70 absolute inset-0 bg-gradient-to-t via-transparent to-transparent md:bg-gradient-to-r" />
-                  <span className="text-cream/85 absolute top-5 left-5 font-mono text-xs font-semibold tracking-[0.2em]">
-                    {String(active + 1).padStart(2, "0")}
-                  </span>
-                  <span className="bg-cream/90 text-olive absolute top-4 right-4 rounded-full px-3.5 py-1.5 text-[0.6875rem] font-semibold tracking-[0.12em] uppercase md:hidden">
-                    {current.duration}
-                  </span>
-                </div>
-
-                <div className="relative flex flex-col p-6 pb-20 sm:p-10 sm:pb-24 lg:p-12 lg:pb-24">
-                  <div className="flex flex-wrap items-center gap-4">
-                    <p className="eyebrow text-terracotta">
-                      Featured Tasting Experience
-                    </p>
-                    <span className="bg-olive/8 text-olive/70 hidden rounded-full px-3 py-1 text-[0.6875rem] font-semibold tracking-[0.12em] uppercase md:inline">
-                      {current.duration}
-                    </span>
-                  </div>
-
-                  <h3 className="display text-olive mt-3 text-[clamp(1.75rem,3.4vw,2.9rem)] leading-[1.05] sm:mt-4">
-                    {current.name}
-                  </h3>
-                  <p className="text-olive/60 mt-2 font-[family-name:var(--font-fraunces)] text-[1rem] italic">
-                    {current.subtitle}
-                  </p>
-
-                  <div className="border-olive/12 mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-y py-3.5 sm:mt-6 sm:py-4">
-                    <span className="display text-terracotta text-[1.75rem] leading-none">
-                      {current.price.base}
-                    </span>
-                    <span className="text-olive/60 text-[0.75rem] font-semibold tracking-[0.14em] uppercase">
-                      base · {current.price.includes}
-                    </span>
-                    <span className="text-ink/55 w-full text-[0.8125rem]">
-                      {current.price.additional}
-                    </span>
-                  </div>
-
-                  <p className="text-ink/70 mt-5 max-w-xl text-[0.875rem] leading-[1.7] sm:mt-6 sm:text-[0.9375rem] sm:leading-[1.75]">
-                    {current.description}
-                  </p>
-
-                  <div className="mt-6 flex flex-wrap items-center gap-4 sm:mt-8">
-                    <a href="#book" className="btn btn-lg btn-terracotta">
-                      Reserve this tasting
-                    </a>
-                    <span className="text-olive/45 text-[0.75rem] tracking-[0.12em] uppercase">
-                      Led by {current.brief.lead}
-                    </span>
-                  </div>
-                </div>
-
-                <BriefAffordance
-                  name={current.name}
-                  brief={current.brief}
-                  open={infoOpen}
-                  setOpen={setInfoOpen}
-                  enabled={expanded}
-                  tone="on-cream"
-                  panelClass="right-0 w-[min(34rem,100%)]"
-                />
+              <div className="flex flex-wrap items-center gap-4">
+                <p className="eyebrow text-terracotta">
+                  Featured Tasting Experience
+                </p>
+                <span className="bg-olive/8 text-olive/70 hidden rounded-full px-3 py-1 text-[0.6875rem] font-semibold tracking-[0.12em] uppercase md:inline">
+                  {current.duration}
+                </span>
               </div>
 
-              <button
-                type="button"
-                onClick={closeExpanded}
-                aria-label="Close expanded card"
-                tabIndex={expanded ? 0 : -1}
-                className="bg-cream text-olive absolute -top-4 -right-4 z-50 flex h-11 w-11 items-center justify-center rounded-full text-xl leading-none shadow-lg transition-transform duration-250 ease-[var(--ease-brand)] hover:scale-110"
-              >
-                ×
-              </button>
-            </div>
+              <h3 className="display text-olive mt-3 text-[clamp(1.75rem,3.4vw,2.9rem)] leading-[1.05] sm:mt-4">
+                {current.name}
+              </h3>
+              <p className="text-olive/60 mt-2 font-[family-name:var(--font-fraunces)] text-[1rem] italic">
+                {current.subtitle}
+              </p>
+
+              <div className="border-olive/12 mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-y py-3.5 sm:mt-6 sm:py-4">
+                <span className="display text-terracotta text-[1.75rem] leading-none">
+                  {current.price.base}
+                </span>
+                <span className="text-olive/60 text-[0.75rem] font-semibold tracking-[0.14em] uppercase">
+                  base · {current.price.includes}
+                </span>
+                <span className="text-ink/55 w-full text-[0.8125rem]">
+                  {current.price.additional}
+                </span>
+              </div>
+
+              <p className="text-ink/70 mt-5 max-w-xl text-[0.875rem] leading-[1.7] sm:mt-6 sm:text-[0.9375rem] sm:leading-[1.75]">
+                {current.description}
+              </p>
+
+              <div className="mt-6 flex flex-wrap items-center gap-4 sm:mt-8">
+                <a href="#book" className="btn btn-lg btn-terracotta">
+                  Reserve this tasting
+                </a>
+                <span className="text-olive/45 text-[0.75rem] tracking-[0.12em] uppercase">
+                  Led by {current.brief.lead}
+                </span>
+              </div>
+            </ExpandedDetail>
           </div>
 
           {/* Position indicator */}

@@ -142,9 +142,12 @@ export const networkingExperiences: {
   brief: {
     summary: string;
     lead: string;
+    /** Trimmed to the differentiating items — the hover brief must not scroll. */
     includes: string;
     idealFor: string;
   };
+  /** The complete list, shown only in the expanded detail view. */
+  includesFull: string;
   image: PlaceholderPhoto;
 }[] = [
   {
@@ -156,10 +159,12 @@ export const networkingExperiences: {
         "A warm, inviting networking table inspired by the olive grove.",
       lead: "Culinary Curator",
       includes:
-        "Olive branch greenery + warm wood styling, Mediterranean linens, ambient candles, light tasting bites (optional add-on)",
+        "Olive branch greenery, warm wood styling, Mediterranean linens, ambient candles",
       idealFor:
         "Welcome receptions, corporate mixers, resort lobby activations",
     },
+    includesFull:
+      "Olive branch greenery + warm wood styling, Mediterranean linens, ambient candles, light tasting bites (optional add-on)",
     image: {
       src: uns("1619143709283-0397c8fc8abc", 1200, 1500),
       alt: "Rustic table set with olive greenery, linen napkins and glassware",
@@ -174,10 +179,12 @@ export const networkingExperiences: {
         "A richer, immersive networking experience inspired by European markets.",
       lead: "Culinary Curator or Wellness Guide",
       includes:
-        "Everything in Grove Social Table, market-style props (crates, herbs, lemons, figs), elevated ceramic bowls, seasonal Mediterranean accents, branded networking cards, optional wellness mini-session",
+        "Everything in Grove Social Table, market-style props, elevated ceramic bowls, branded networking cards",
       idealFor:
         "Retreats, boutique hotels, wellness groups, conference lounges",
     },
+    includesFull:
+      "Everything in Grove Social Table, market-style props (crates, herbs, lemons, figs), elevated ceramic bowls, seasonal Mediterranean accents, branded networking cards, optional wellness mini-session",
     image: {
       src: uns("1705500473449-539f7ee4e7bf", 1200, 1500),
       alt: "Mediterranean market stall stacked with citrus, figs and produce crates",
@@ -191,9 +198,11 @@ export const networkingExperiences: {
       summary: "Your premium, luxury-forward networking activation.",
       lead: "Master Grove Curator",
       includes:
-        "Everything in Market Mixer, premium tablescape styling, gold-accent tasting vessels, elevated floral + olive branch arrangements, Mediterranean lanterns + luxury candles, custom branded menu or networking cards, optional musician/photographer/premium EVOO gifts",
+        "Premium tablescape, gold-accent vessels, elevated florals, custom branded materials",
       idealFor: "VIP receptions, incentive groups, luxury resort activations",
     },
+    includesFull:
+      "Everything in Market Mixer, premium tablescape styling, gold-accent tasting vessels, elevated floral + olive branch arrangements, Mediterranean lanterns + luxury candles, custom branded menu or networking cards, optional musician/photographer/premium EVOO gifts",
     image: {
       src: uns("1608538242779-113f7b19baa1", 1200, 1500),
       alt: "Long luxury tablescape lit by candles with florals and gold accents",
