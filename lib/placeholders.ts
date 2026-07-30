@@ -22,56 +22,49 @@ export const heroImage: PlaceholderPhoto = {
   alt: "Golden olive oil in a small glass dish on a wood round, surrounded by olive branches",
 };
 
-/** Section 4 — Featured Tastings carousel */
+/** Section 4 — Featured Tastings coverflow. Client-approved names, copy and pricing. */
 export const featuredTastings: {
   name: string;
+  subtitle: string;
+  description: string;
   duration: string;
-  note: string;
+  price: string;
   image: PlaceholderPhoto;
 }[] = [
   {
-    name: "Classic Flight",
-    duration: "45 min",
-    note: "Five single-varietal oils, poured and led side by side.",
+    name: "Pressed & Paired",
+    subtitle: "The Olive Grove Tasting Menu",
+    description:
+      "Your entry-level tasting — elegant, approachable, and perfect for corporate groups, resorts, and private events. A guided olive oil tasting with three chef-crafted pairings, premium Treurer EVOO, and culinary storytelling.",
+    duration: "45–60 min",
+    price: "$85–$125 per guest",
     image: {
-      src: uns("1652282556241-0ce13285d00f", 1200, 1500),
-      alt: "Olive oil poured over a tasting spoon",
+      src: uns("1653611540493-b3a896319fbf", 1200, 1600),
+      alt: "Mediterranean small plates and mezze spread laid across a table",
     },
   },
   {
-    name: "Estate Reserve Tasting",
-    duration: "75 min",
-    note: "Limited-harvest pressings from a single grove.",
+    name: "Taste & Thrive",
+    subtitle: "The Olive Oil Wellness Journey",
+    description:
+      "Your wellness-forward tasting — culinary meets lifestyle. Includes everything in Pressed & Paired plus a certified health coach session, EVOO health benefits education, and Mediterranean lifestyle guidance. Perfect for retreats, resorts, and corporate wellness programs.",
+    duration: "60–75 min",
+    price: "$145–$185 per guest",
     image: {
-      src: uns("1707827914998-0d56ee13c161", 1200, 1500),
-      alt: "Dark glass olive oil bottle beside a single olive",
+      src: uns("1649825319037-f30ea5b611c7", 1200, 1600),
+      alt: "Fresh tomato and herb salad served in a bowl with a wooden spoon",
     },
   },
   {
-    name: "Olive Oil & Cheese Pairing",
-    duration: "90 min",
-    note: "Six oils matched to aged and fresh cheeses.",
+    name: "The Chef's Grove Table",
+    subtitle: "Premium Mediterranean Pairing Experience",
+    description:
+      "Your luxury tier — a premium, chef-driven Mediterranean tasting with an elevated multi-course menu, premium EVOO flight, optional wine or mocktail pairings, and signature hospitality touches. Designed for high-end groups and resort VIP activations.",
+    duration: "75–90 min",
+    price: "$225–$325 per guest",
     image: {
-      src: uns("1598306442928-4d90f32c6866", 1200, 1500),
-      alt: "Cheese board and tasting glasses set outdoors",
-    },
-  },
-  {
-    name: "Bread, Salt & Oil",
-    duration: "60 min",
-    note: "The oldest tasting there is, done properly.",
-    image: {
-      src: uns("1666475877178-9cf341547fc1", 1200, 1500),
-      alt: "Rustic bread with olives and oil on a dark board",
-    },
-  },
-  {
-    name: "Private Group Tasting",
-    duration: "2 hrs",
-    note: "Your table, your pace, up to fourteen guests.",
-    image: {
-      src: uns("1527756898251-203e9ce0d9c4", 1200, 1500),
-      alt: "Long rustic table set with olive oil and glassware by a window",
+      src: uns("1676471926534-d5c9771909fa", 1200, 1600),
+      alt: "Chef finishing a plated course at a fine dining pass",
     },
   },
 ];
