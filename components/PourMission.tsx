@@ -188,9 +188,9 @@ export default function PourMission() {
                 className="text-ink/70 mt-8 max-w-lg text-[1.0625rem] leading-[1.75] will-change-[opacity,transform]"
               >
                 {/* TODO: client copy needed */}
-                We pour, you taste, and somewhere around the third glass it stops
-                being a bottle from the shop and starts being a place, a season,
-                and the family who pressed it.
+                Olive oil is a conversation, not a condiment. We pour, you taste,
+                and somewhere around the third glass it reveals its story — the
+                grove, the harvest, and the family who brought it to life.
               </p>
 
               <div
