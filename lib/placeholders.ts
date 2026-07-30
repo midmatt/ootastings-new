@@ -24,10 +24,15 @@ export const heroImage: PlaceholderPhoto = {
 
 /**
  * Section 4 — Featured Tastings coverflow.
- * Client-approved names, copy, pricing and comparison detail. Role titles are
- * per package (Culinary Curator / Wellness Guide / Experience Curator) and
- * replace generic "chef" wording in the descriptive copy — note that the
- * package name "The Chef's Grove Table" is a proper name and stays as-is.
+ *
+ * Client-approved names, copy, pricing and package brief. Role titles are per
+ * package (Culinary Curator / Wellness Guide / Experience Curator) and replace
+ * generic "chef" wording in the descriptive copy — the package name "The
+ * Chef's Grove Table" is a proper name and stays as-is.
+ *
+ * `brief` is the condensed hover summary: a couple of sentences plus short
+ * scannable lines, not a reproduction of the full comparison table. `note` is
+ * optional and the layout has room for another line or two beside it.
  */
 export const featuredTastings: {
   name: string;
@@ -35,8 +40,15 @@ export const featuredTastings: {
   role: string;
   description: string;
   duration: string;
-  price: string;
-  details: { label: string; value: string }[];
+  price: { base: string; includes: string; additional: string };
+  brief: {
+    summary: string;
+    lead: string;
+    includes: string;
+    idealFor: string;
+    addOns: string;
+    note?: string;
+  };
   image: PlaceholderPhoto;
 }[] = [
   {
@@ -46,28 +58,19 @@ export const featuredTastings: {
     description:
       "Your entry-level tasting — elegant, approachable, and perfect for corporate groups, resorts, and private events. A guided olive oil tasting with three Culinary Curator-crafted pairings, premium Treurer EVOO, and culinary storytelling.",
     duration: "45–60 min",
-    price: "$85–$125 per guest",
-    details: [
-      {
-        label: "Experience Style",
-        value:
-          "Culinary Curator-guided olive oil tasting with curated pairings",
-      },
-      { label: "Duration", value: "45–60 minutes" },
-      { label: "Olive Oil Flight", value: "Premium Treurer EVOO" },
-      { label: "Curated Pairings", value: "Three pairings" },
-      { label: "Wellness Component", value: "Not included" },
-      {
-        label: "Storytelling & Education",
-        value: "Olive oil origins + grove narrative",
-      },
-      { label: "Presentation & Setup", value: "Standard tasting setup" },
-      { label: "Ideal For", value: "Corporate groups, private events, resorts" },
-      {
-        label: "Optional Add-Ons",
-        value: "Wine pairing, mocktails, gift bottles",
-      },
-    ],
+    price: {
+      base: "$5,000",
+      includes: "up to 30 guests",
+      additional: "+$125 per guest after",
+    },
+    brief: {
+      summary:
+        "A Culinary Curator-guided olive oil tasting with curated pairings, told through the origins of the oil and the story of the grove.",
+      lead: "Culinary Curator",
+      includes: "Three pairings, premium Treurer EVOO, standard tasting setup",
+      idealFor: "Corporate groups, private events, resorts",
+      addOns: "Wine pairing, mocktails, gift bottles",
+    },
     image: {
       src: uns("1653611540493-b3a896319fbf", 1200, 1600),
       alt: "Mediterranean small plates and mezze spread laid across a table",
@@ -80,30 +83,20 @@ export const featuredTastings: {
     description:
       "Your wellness-forward tasting — culinary meets lifestyle. Includes everything in Pressed & Paired plus a certified Wellness Guide session, EVOO health benefits education, and Mediterranean lifestyle guidance. Perfect for retreats, resorts, and corporate wellness programs.",
     duration: "60–75 min",
-    price: "$145–$185 per guest",
-    details: [
-      {
-        label: "Experience Style",
-        value: "Culinary + wellness fusion with certified Wellness Guide",
-      },
-      { label: "Duration", value: "60–75 minutes" },
-      { label: "Olive Oil Flight", value: "Premium Treurer EVOO" },
-      { label: "Curated Pairings", value: "Three pairings" },
-      {
-        label: "Wellness Component",
-        value: "Health coach session + EVOO health benefits education",
-      },
-      {
-        label: "Storytelling & Education",
-        value: "Culinary + wellness storytelling",
-      },
-      { label: "Presentation & Setup", value: "Enhanced wellness-forward setup" },
-      {
-        label: "Ideal For",
-        value: "Retreats, wellness programs, boutique hotels",
-      },
-      { label: "Optional Add-Ons", value: "Wellness glow shots, 1:1 sessions" },
-    ],
+    price: {
+      base: "$5,500",
+      includes: "up to 20 guests",
+      additional: "+$185 per guest after",
+    },
+    brief: {
+      summary:
+        "Culinary meets lifestyle: a wellness-forward tasting run with a certified Wellness Guide, pairing EVOO education with Mediterranean lifestyle guidance.",
+      lead: "Wellness Guide + Culinary Curator",
+      includes:
+        "Three pairings, premium Treurer EVOO, health coach session, wellness-forward setup",
+      idealFor: "Retreats, wellness programs, boutique hotels",
+      addOns: "Wellness glow shots, 1:1 sessions",
+    },
     image: {
       src: uns("1649825319037-f30ea5b611c7", 1200, 1600),
       alt: "Fresh tomato and herb salad served in a bowl with a wooden spoon",
@@ -116,34 +109,21 @@ export const featuredTastings: {
     description:
       "Your luxury tier — a premium, Experience Curator–driven Mediterranean tasting with an elevated multi-course menu, premium EVOO flight, optional wine or mocktail pairings, and signature hospitality touches. Designed for high-end groups and resort VIP activations.",
     duration: "75–90 min",
-    price: "$225–$325 per guest",
-    details: [
-      {
-        label: "Experience Style",
-        value:
-          "Elevated, multi-course Mediterranean tasting led by our Experience Curator",
-      },
-      { label: "Duration", value: "75–90 minutes" },
-      {
-        label: "Olive Oil Flight",
-        value: "Premium EVOO flight (multiple varietals)",
-      },
-      { label: "Curated Pairings", value: "Expanded premium pairings" },
-      { label: "Wellness Component", value: "Optional add-on" },
-      {
-        label: "Storytelling & Education",
-        value: "Experience Curator–led Mediterranean culinary journey",
-      },
-      {
-        label: "Presentation & Setup",
-        value: "Luxury tablescape + premium presentation",
-      },
-      { label: "Ideal For", value: "VIP groups, incentive programs, luxury events" },
-      {
-        label: "Optional Add-Ons",
-        value: "Wine pairings, culinary curator meet & greet, premium gifts",
-      },
-    ],
+    price: {
+      base: "$6,500",
+      includes: "up to 30 guests",
+      additional: "+$325 per guest after",
+    },
+    brief: {
+      summary:
+        "An elevated, multi-course Mediterranean tasting led by our Experience Curator as a guided culinary journey.",
+      lead: "Experience Curator",
+      includes:
+        "Expanded premium pairings, premium EVOO flight across multiple varietals, luxury tablescape",
+      idealFor: "VIP groups, incentive programs, luxury events",
+      addOns: "Wine pairings, premium gifts, meet & greet",
+      note: "Wellness component available as an add-on.",
+    },
     image: {
       src: uns("1676471926534-d5c9771909fa", 1200, 1600),
       alt: "Experience Curator finishing a plated course at a fine dining pass",

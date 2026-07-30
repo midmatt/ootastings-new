@@ -20,27 +20,145 @@ import { featuredTastings } from "@/lib/placeholders";
  * slides across the centre card against the direction of travel.
  *
  * Two layers sit on top of that:
- * - a "+" button on each card opens a details panel (hover on desktop, tap on
- *   touch) carrying the package comparison data;
- * - clicking the centre card expands it for easier reading, which locks
- *   rotation entirely — arrows, dots, swipe and autoplay all stand down until
- *   it is closed via the X, the backdrop, Escape, or another click on the card.
+ * - a "+" button opens a short package brief (hover on desktop, tap on touch),
+ *   laid out wide and shallow so it reads in a few seconds;
+ * - clicking the centre card opens a full-width detail panel over the stage.
+ *   Rotation locks while it is open — arrows, dots, swipe and autoplay all
+ *   stand down until it is closed via the X, the backdrop, or Escape.
  */
 
 /** Slot offset as a percentage of card width, and the side cards' recession. */
 const SHIFT = 66;
 const SIDE_SCALE = 0.74;
 const SIDE_OPACITY = 0.62;
-/** Side cards recede further while a card is expanded. */
-const SIDE_OPACITY_LOCKED = 0.16;
+/** All three cards recede behind the detail panel while it is open. */
+const OPACITY_BEHIND_PANEL = 0.16;
 const SIDE_TILT = 12;
-const EXPANDED_SCALE = 1.12;
 
 const SLIDE_MS = 340;
 const WRAP_MS = 130;
 const AUTOPLAY_MS = 9000;
 
+type Tasting = (typeof featuredTastings)[number];
 type Wrap = { id: number; seq: number } | null;
+
+/**
+ * The "+" affordance and its brief. Used both on the centre card and inside the
+ * expanded detail panel, so the same summary is one hover away in either state.
+ */
+function BriefAffordance({
+  tasting,
+  open,
+  setOpen,
+  enabled,
+  tone = "on-photo",
+}: {
+  tasting: Tasting;
+  open: boolean;
+  setOpen: (fn: (v: boolean) => boolean) => void;
+  enabled: boolean;
+  tone?: "on-photo" | "on-cream";
+}) {
+  const { brief } = tasting;
+
+  return (
+    <div
+      className={`absolute right-5 bottom-5 z-30 ${enabled ? "" : "pointer-events-none"}`}
+      // Pointer-typed so a tap does not fire the hover-open path and then get
+      // toggled shut again by its own click.
+      onPointerEnter={(e) =>
+        e.pointerType === "mouse" && enabled && setOpen(() => true)
+      }
+      onPointerLeave={(e) =>
+        e.pointerType === "mouse" && enabled && setOpen(() => false)
+      }
+    >
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen((v) => !v);
+        }}
+        aria-label={`What's included in ${tasting.name}`}
+        aria-expanded={enabled && open}
+        tabIndex={enabled ? 0 : -1}
+        className={`flex h-11 w-11 items-center justify-center rounded-full border text-xl leading-none backdrop-blur-sm transition-all duration-250 ease-[var(--ease-brand)] ${
+          tone === "on-cream"
+            ? "border-olive/25 text-olive hover:bg-olive hover:text-cream"
+            : "border-cream/50 bg-cream/20 text-cream hover:bg-cream hover:text-olive"
+        }`}
+      >
+        <span
+          className={`block transition-transform duration-250 ease-[var(--ease-brand)] ${
+            enabled && open ? "rotate-45" : ""
+          }`}
+        >
+          +
+        </span>
+      </button>
+
+      {/* Wide and shallow: a quick brief, not the comparison table. */}
+      <div
+        role="dialog"
+        aria-label={`${tasting.name} summary`}
+        onClick={(e) => e.stopPropagation()}
+        className={`bg-cream rounded-card absolute right-0 bottom-14 w-[min(34rem,78vw)] origin-bottom-right p-6 shadow-[0_28px_60px_-20px_rgba(15,20,5,0.6)] transition-all duration-250 ease-[var(--ease-brand)] ${
+          enabled && open
+            ? "pointer-events-auto scale-100 opacity-100"
+            : "pointer-events-none scale-95 opacity-0"
+        }`}
+      >
+        <p className="eyebrow text-terracotta mb-3">What&apos;s included</p>
+
+        <p className="text-olive text-[0.9375rem] leading-[1.55]">
+          {brief.summary}
+        </p>
+
+        <dl className="border-olive/10 mt-4 grid gap-x-8 gap-y-3 border-t pt-4 sm:grid-cols-2">
+          <div>
+            <dt className="text-olive/45 text-[0.625rem] font-semibold tracking-[0.16em] uppercase">
+              Led by
+            </dt>
+            <dd className="text-olive mt-0.5 text-[0.8125rem] leading-snug">
+              {brief.lead}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-olive/45 text-[0.625rem] font-semibold tracking-[0.16em] uppercase">
+              Includes
+            </dt>
+            <dd className="text-olive mt-0.5 text-[0.8125rem] leading-snug">
+              {brief.includes}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-olive/45 text-[0.625rem] font-semibold tracking-[0.16em] uppercase">
+              Ideal for
+            </dt>
+            <dd className="text-olive mt-0.5 text-[0.8125rem] leading-snug">
+              {brief.idealFor}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-olive/45 text-[0.625rem] font-semibold tracking-[0.16em] uppercase">
+              Add-ons available
+            </dt>
+            <dd className="text-olive mt-0.5 text-[0.8125rem] leading-snug">
+              {brief.addOns}
+            </dd>
+          </div>
+          {brief.note && (
+            <div className="sm:col-span-2">
+              <dd className="text-olive/60 text-[0.8125rem] leading-snug italic">
+                {brief.note}
+              </dd>
+            </div>
+          )}
+        </dl>
+      </div>
+    </div>
+  );
+}
 
 export default function FeaturedTastings() {
   const total = featuredTastings.length;
@@ -53,6 +171,9 @@ export default function FeaturedTastings() {
   const seq = useRef(0);
   const touch = useRef<{ x: number; y: number } | null>(null);
   const stage = useRef<HTMLDivElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
+
+  const current = featuredTastings[active];
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -64,7 +185,7 @@ export default function FeaturedTastings() {
 
   const go = useCallback(
     (dir: 1 | -1) => {
-      if (expanded) return; // rotation is locked while a card is open
+      if (expanded) return; // rotation is locked while the detail panel is open
       seq.current += 1;
       // Going forward, the left card is the one that has to jump to the right.
       setWrap({
@@ -84,7 +205,7 @@ export default function FeaturedTastings() {
     return () => clearTimeout(t);
   }, [wrap]);
 
-  // Slow autoplay; a manual move resets it. Hover, an expanded card, or
+  // Slow autoplay; a manual move resets it. Hover, the detail panel, or
   // reduced motion all stop it.
   useEffect(() => {
     if (hovered || expanded || !motionOk) return;
@@ -92,23 +213,18 @@ export default function FeaturedTastings() {
     return () => clearTimeout(t);
   }, [hovered, expanded, motionOk, go]);
 
-  // An expanded card is nearly viewport-height on a laptop, so bring it into
-  // frame rather than letting it run off the bottom — and leave room at the top
-  // for the sticky header and the card's own close button. The rect is measured
-  // unscaled (the growth is still animating), so the scale is applied by hand.
+  // Bring the panel into frame, leaving room for the sticky header and the
+  // panel's own close button.
   useEffect(() => {
-    if (!expanded) return;
-    const card = stage.current?.querySelector('article[aria-hidden="false"]');
-    if (!card) return;
-    const r = card.getBoundingClientRect();
-    const grownTop = r.top - (r.height * (EXPANDED_SCALE - 1)) / 2;
-    window.scrollTo({ top: window.scrollY + grownTop - 116, behavior: "smooth" });
+    if (!expanded || !panel.current) return;
+    const top = panel.current.getBoundingClientRect().top;
+    window.scrollTo({ top: window.scrollY + top - 116, behavior: "smooth" });
   }, [expanded]);
 
-  // Escape closes the expanded card.
+  // Escape closes the detail panel.
   useEffect(() => {
     if (!expanded) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setExpanded(false);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && closeExpanded();
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [expanded]);
@@ -200,13 +316,13 @@ export default function FeaturedTastings() {
             onTouchEnd={onTouchEnd}
             className="relative mt-16 grid touch-pan-y place-items-center outline-none [perspective:1800px] md:mt-24"
           >
-            {/* click-outside target while a card is expanded */}
+            {/* click-outside target while the detail panel is open */}
             <button
               type="button"
               tabIndex={-1}
               aria-label="Close details"
               onClick={closeExpanded}
-              className={`bg-olive-deep/45 absolute inset-x-[-50vw] -inset-y-20 z-20 cursor-default transition-opacity duration-300 ${
+              className={`bg-olive-deep/55 absolute inset-x-[-50vw] -inset-y-[200vh] z-20 cursor-default transition-opacity duration-300 ${
                 expanded ? "opacity-100" : "pointer-events-none opacity-0"
               }`}
             />
@@ -215,26 +331,24 @@ export default function FeaturedTastings() {
               const slot = slotOf(i);
               const isCenter = slot === 0;
               const isWrapping = wrap?.id === i;
-              const isOpen = isCenter && expanded;
-              const scale = isOpen ? EXPANDED_SCALE : isCenter ? 1 : SIDE_SCALE;
 
               return (
                 <article
                   key={tasting.name}
                   aria-hidden={!isCenter}
-                  className={`col-start-1 row-start-1 w-[88vw] max-w-[26rem] will-change-[transform,opacity] sm:w-[27rem] sm:max-w-none lg:w-[32rem] ${
-                    !isCenter && expanded ? "pointer-events-none" : ""
+                  className={`relative col-start-1 row-start-1 w-[88vw] max-w-[26rem] will-change-[transform,opacity] sm:w-[27rem] sm:max-w-none lg:w-[32rem] ${
+                    expanded ? "pointer-events-none" : ""
                   }`}
                   style={{
-                    transform: `translate3d(${slot * SHIFT}%, 0, 0) scale(${scale}) rotateY(${
-                      isOpen ? 0 : slot * -SIDE_TILT
-                    }deg)`,
+                    transform: `translate3d(${slot * SHIFT}%, 0, 0) scale(${
+                      isCenter ? 1 : SIDE_SCALE
+                    }) rotateY(${slot * -SIDE_TILT}deg)`,
                     opacity: isWrapping
                       ? 0
-                      : isCenter
-                        ? 1
-                        : expanded
-                          ? SIDE_OPACITY_LOCKED
+                      : expanded
+                        ? OPACITY_BEHIND_PANEL
+                        : isCenter
+                          ? 1
                           : SIDE_OPACITY,
                     zIndex: isCenter ? 30 : 10,
                     // While wrapping, only the fade is tweened: the jump to the
@@ -246,178 +360,184 @@ export default function FeaturedTastings() {
                     transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
                   }}
                 >
-                  <div className="relative">
-                    {/* close affordance for the expanded state */}
-                    <button
-                      type="button"
-                      onClick={closeExpanded}
-                      aria-label="Close expanded card"
-                      className={`bg-cream text-olive absolute -top-3 -right-3 z-40 flex h-9 w-9 items-center justify-center rounded-full text-lg leading-none shadow-lg transition-all duration-250 ease-[var(--ease-brand)] hover:scale-110 ${
-                        isOpen
-                          ? "scale-100 opacity-100"
-                          : "pointer-events-none scale-75 opacity-0"
-                      }`}
-                    >
-                      ×
-                    </button>
-
+                  <div
+                    role="button"
+                    tabIndex={isCenter && !expanded ? 0 : -1}
+                    aria-expanded={isCenter ? expanded : undefined}
+                    onClick={() => {
+                      if (isCenter) {
+                        setExpanded(true);
+                        setInfoOpen(false);
+                      } else {
+                        go(slot === 1 ? 1 : -1);
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key !== "Enter" && e.key !== " ") return;
+                      e.preventDefault();
+                      if (isCenter) setExpanded(true);
+                      else go(slot === 1 ? 1 : -1);
+                    }}
+                    className={`group rounded-card relative block aspect-[3/4] cursor-pointer overflow-hidden transition-shadow duration-300 ease-[var(--ease-brand)] ${
+                      isCenter ? "shadow-lift" : "shadow-soft"
+                    }`}
+                  >
+                    <PlaceholderImage
+                      src={tasting.image.src}
+                      alt={tasting.image.alt}
+                      fill
+                      sizes="(max-width: 640px) 88vw, (max-width: 1024px) 27rem, 32rem"
+                      priority={i === 0}
+                      className="object-cover transition-transform duration-500 ease-[var(--ease-brand)] group-hover:scale-[1.04]"
+                    />
+                    {/* Solid under the copy, clearing fast so the top of the
+                        photograph still reads. */}
                     <div
-                      role="button"
-                      tabIndex={isCenter ? 0 : -1}
-                      aria-expanded={isCenter ? expanded : undefined}
-                      onClick={() => {
-                        if (isCenter) {
-                          setExpanded((v) => !v);
-                          setInfoOpen(false);
-                        } else {
-                          go(slot === 1 ? 1 : -1);
-                        }
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          "linear-gradient(to top, rgba(28,38,9,0.97) 0%, rgba(28,38,9,0.93) 40%, rgba(28,38,9,0.42) 64%, rgba(28,38,9,0.06) 88%)",
                       }}
-                      onKeyDown={(e) => {
-                        if (e.key !== "Enter" && e.key !== " ") return;
-                        e.preventDefault();
-                        if (isCenter) setExpanded((v) => !v);
-                        else go(slot === 1 ? 1 : -1);
-                      }}
-                      className={`group rounded-card relative block aspect-[3/4] cursor-pointer overflow-hidden transition-shadow duration-300 ease-[var(--ease-brand)] ${
-                        isCenter ? "shadow-lift" : "shadow-soft"
-                      }`}
-                    >
-                      <PlaceholderImage
-                        src={tasting.image.src}
-                        alt={tasting.image.alt}
-                        fill
-                        sizes="(max-width: 640px) 84vw, (max-width: 1024px) 27rem, 32rem"
-                        priority={i === 0}
-                        className="object-cover transition-transform duration-500 ease-[var(--ease-brand)] group-hover:scale-[1.04]"
-                      />
-                      {/* Solid under the copy, clearing fast so the top of the
-                          photograph still reads. */}
-                      <div
-                        className="absolute inset-0"
-                        style={{
-                          background:
-                            "linear-gradient(to top, rgba(28,38,9,0.97) 0%, rgba(28,38,9,0.93) 40%, rgba(28,38,9,0.42) 64%, rgba(28,38,9,0.06) 88%)",
-                        }}
-                      />
-                      {/* seats the badges against bright photography */}
-                      <div className="from-olive-deep/55 absolute inset-x-0 top-0 h-24 bg-gradient-to-b to-transparent" />
+                    />
+                    {/* seats the badges against bright photography */}
+                    <div className="from-olive-deep/55 absolute inset-x-0 top-0 h-24 bg-gradient-to-b to-transparent" />
 
-                      <span className="text-cream/85 absolute top-5 left-5 font-mono text-xs font-semibold tracking-[0.2em]">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
+                    <span className="text-cream/85 absolute top-5 left-5 font-mono text-xs font-semibold tracking-[0.2em]">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
 
-                      <span className="bg-cream/90 text-olive absolute top-4 right-4 rounded-full px-3.5 py-1.5 text-[0.6875rem] font-semibold tracking-[0.12em] uppercase">
-                        {tasting.duration}
-                      </span>
+                    <span className="bg-cream/90 text-olive absolute top-4 right-4 rounded-full px-3.5 py-1.5 text-[0.6875rem] font-semibold tracking-[0.12em] uppercase">
+                      {tasting.duration}
+                    </span>
 
-                      <div className="absolute inset-x-0 bottom-0 p-5 pr-16 sm:p-7 sm:pr-24">
-                        <h3 className="display text-cream text-[1.45rem] leading-tight sm:text-[1.8rem]">
-                          {tasting.name}
-                        </h3>
-                        <p className="text-cream/65 mt-1.5 font-[family-name:var(--font-fraunces)] text-[0.8rem] italic sm:text-[0.85rem]">
-                          {tasting.subtitle}
-                        </p>
+                    <div className="absolute inset-x-0 bottom-0 p-5 pr-16 sm:p-7 sm:pr-24">
+                      <h3 className="display text-cream text-[1.45rem] leading-tight sm:text-[1.8rem]">
+                        {tasting.name}
+                      </h3>
+                      <p className="text-cream/65 mt-1.5 font-[family-name:var(--font-fraunces)] text-[0.8rem] italic sm:text-[0.85rem]">
+                        {tasting.subtitle}
+                      </p>
 
-                        <p className="text-terracotta-soft mt-3.5 flex items-baseline gap-1.5 text-[1.05rem] font-semibold sm:mt-4 sm:text-[1.15rem]">
-                          {tasting.price.split(" per ")[0]}
-                          <span className="text-cream/55 text-[0.6875rem] font-medium tracking-[0.12em] uppercase">
-                            per guest
-                          </span>
-                        </p>
+                      <p className="text-terracotta-soft mt-3.5 flex flex-wrap items-baseline gap-x-2 text-[1.05rem] font-semibold sm:mt-4 sm:text-[1.15rem]">
+                        {tasting.price.base}
+                        <span className="text-cream/55 text-[0.6875rem] font-medium tracking-[0.12em] uppercase">
+                          base · {tasting.price.includes}
+                        </span>
+                      </p>
+                      <p className="text-cream/55 mt-1 text-[0.6875rem] tracking-[0.06em]">
+                        {tasting.price.additional}
+                      </p>
 
-                        <p className="text-cream/75 mt-2.5 text-[0.75rem] leading-[1.5] sm:mt-3 sm:text-[0.875rem] sm:leading-[1.6]">
-                          {tasting.description}
-                        </p>
+                      <p className="text-cream/75 mt-2.5 text-[0.75rem] leading-[1.5] sm:mt-3 sm:text-[0.875rem] sm:leading-[1.6]">
+                        {tasting.description}
+                      </p>
 
-                        <span className="bg-terracotta-soft mt-4 block h-px w-10 origin-left transition-transform duration-400 ease-[var(--ease-brand)] group-hover:scale-x-[3.5]" />
-
-                        {/* booking stays reachable once the card is open */}
-                        <a
-                          href="#book"
-                          onClick={(e) => e.stopPropagation()}
-                          tabIndex={isOpen ? 0 : -1}
-                          className={`btn btn-terracotta mt-5 px-5 py-2.5 text-[0.8125rem] transition-all duration-300 ease-[var(--ease-brand)] ${
-                            isOpen
-                              ? "pointer-events-auto translate-y-0 opacity-100"
-                              : "pointer-events-none h-0 translate-y-2 overflow-hidden py-0 opacity-0"
-                          }`}
-                        >
-                          Reserve this tasting
-                        </a>
-                      </div>
-
-                      {/* ---- details "+" button and panel ---- */}
-                      <div
-                        className={`absolute right-5 bottom-5 z-30 ${
-                          isCenter ? "" : "pointer-events-none"
-                        }`}
-                        // Pointer-typed so a tap does not fire the hover-open
-                        // path and then get toggled shut again by its own click.
-                        onPointerEnter={(e) =>
-                          e.pointerType === "mouse" && isCenter && setInfoOpen(true)
-                        }
-                        onPointerLeave={(e) =>
-                          e.pointerType === "mouse" && isCenter && setInfoOpen(false)
-                        }
-                      >
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setInfoOpen((v) => !v);
-                          }}
-                          aria-label={`What's included in ${tasting.name}`}
-                          aria-expanded={isCenter && infoOpen}
-                          tabIndex={isCenter ? 0 : -1}
-                          className="border-cream/50 bg-cream/20 text-cream hover:bg-cream hover:text-olive flex h-11 w-11 items-center justify-center rounded-full border text-xl leading-none backdrop-blur-sm transition-all duration-250 ease-[var(--ease-brand)]"
-                        >
-                          <span
-                            className={`block transition-transform duration-250 ease-[var(--ease-brand)] ${
-                              isCenter && infoOpen ? "rotate-45" : ""
-                            }`}
-                          >
-                            +
-                          </span>
-                        </button>
-
-                        <div
-                          role="dialog"
-                          aria-label={`${tasting.name} details`}
-                          onClick={(e) => e.stopPropagation()}
-                          className={`bg-cream rounded-card absolute right-0 bottom-14 w-[min(21rem,72vw)] origin-bottom-right p-5 shadow-[0_28px_60px_-20px_rgba(15,20,5,0.6)] transition-all duration-250 ease-[var(--ease-brand)] ${
-                            isCenter && infoOpen
-                              ? "pointer-events-auto scale-100 opacity-100"
-                              : "pointer-events-none scale-90 opacity-0"
-                          }`}
-                        >
-                          <p className="eyebrow text-terracotta mb-3">
-                            What&apos;s included
-                          </p>
-                          <dl className="max-h-[min(22rem,44vh)] overflow-y-auto pr-1">
-                            {tasting.details.map((row) => (
-                              <div
-                                key={row.label}
-                                className="border-olive/10 border-b py-2 last:border-0"
-                              >
-                                <dt className="text-olive/45 text-[0.625rem] font-semibold tracking-[0.16em] uppercase">
-                                  {row.label}
-                                </dt>
-                                <dd className="text-olive mt-0.5 text-[0.8125rem] leading-snug">
-                                  {row.value}
-                                </dd>
-                              </div>
-                            ))}
-                          </dl>
-                          {/* signals that the list scrolls */}
-                          <div className="from-cream pointer-events-none absolute inset-x-5 bottom-5 h-7 bg-gradient-to-t to-transparent" />
-                        </div>
-                      </div>
+                      <span className="bg-terracotta-soft mt-4 block h-px w-10 origin-left transition-transform duration-400 ease-[var(--ease-brand)] group-hover:scale-x-[3.5]" />
                     </div>
                   </div>
+
+                  {/* Outside the card: the card clips its overflow, and the
+                      brief is deliberately wider than the card. */}
+                  <BriefAffordance
+                    tasting={tasting}
+                    open={infoOpen}
+                    setOpen={setInfoOpen}
+                    enabled={isCenter && !expanded}
+                  />
                 </article>
               );
             })}
+
+            {/* ---------- expanded detail panel ---------- */}
+            <div
+              ref={panel}
+              aria-hidden={!expanded}
+              className={`col-start-1 row-start-1 z-40 w-[min(72rem,92vw)] transition-all duration-340 ease-[var(--ease-brand)] ${
+                expanded
+                  ? "scale-100 opacity-100"
+                  : "pointer-events-none scale-95 opacity-0"
+              }`}
+            >
+              <div className="bg-cream rounded-card shadow-lift relative grid max-h-[86vh] overflow-x-hidden overflow-y-auto md:max-h-none md:grid-cols-[minmax(0,44%)_1fr] md:overflow-hidden">
+                <div className="relative h-44 sm:h-56 md:h-auto md:min-h-[30rem]">
+                  <PlaceholderImage
+                    src={current.image.src}
+                    alt={current.image.alt}
+                    fill
+                    sizes="(max-width: 768px) 92vw, 32rem"
+                    className="object-cover"
+                  />
+                  <div className="from-olive-deep/70 absolute inset-0 bg-gradient-to-t via-transparent to-transparent md:bg-gradient-to-r" />
+                  <span className="text-cream/85 absolute top-5 left-5 font-mono text-xs font-semibold tracking-[0.2em]">
+                    {String(active + 1).padStart(2, "0")}
+                  </span>
+                  <span className="bg-cream/90 text-olive absolute top-4 right-4 rounded-full px-3.5 py-1.5 text-[0.6875rem] font-semibold tracking-[0.12em] uppercase md:hidden">
+                    {current.duration}
+                  </span>
+                </div>
+
+                <div className="relative flex flex-col p-6 pb-20 sm:p-10 sm:pb-24 lg:p-12 lg:pb-24">
+                  <div className="flex flex-wrap items-center gap-4">
+                    <p className="eyebrow text-terracotta">
+                      Featured Tasting Flight
+                    </p>
+                    <span className="bg-olive/8 text-olive/70 hidden rounded-full px-3 py-1 text-[0.6875rem] font-semibold tracking-[0.12em] uppercase md:inline">
+                      {current.duration}
+                    </span>
+                  </div>
+
+                  <h3 className="display text-olive mt-3 text-[clamp(1.75rem,3.4vw,2.9rem)] leading-[1.05] sm:mt-4">
+                    {current.name}
+                  </h3>
+                  <p className="text-olive/60 mt-2 font-[family-name:var(--font-fraunces)] text-[1rem] italic">
+                    {current.subtitle}
+                  </p>
+
+                  <div className="border-olive/12 mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-y py-3.5 sm:mt-6 sm:py-4">
+                    <span className="display text-terracotta text-[1.75rem] leading-none">
+                      {current.price.base}
+                    </span>
+                    <span className="text-olive/60 text-[0.75rem] font-semibold tracking-[0.14em] uppercase">
+                      base · {current.price.includes}
+                    </span>
+                    <span className="text-ink/55 w-full text-[0.8125rem]">
+                      {current.price.additional}
+                    </span>
+                  </div>
+
+                  <p className="text-ink/70 mt-5 max-w-xl text-[0.875rem] leading-[1.7] sm:mt-6 sm:text-[0.9375rem] sm:leading-[1.75]">
+                    {current.description}
+                  </p>
+
+                  <div className="mt-6 flex flex-wrap items-center gap-4 sm:mt-8">
+                    <a href="#book" className="btn btn-lg btn-terracotta">
+                      Reserve this tasting
+                    </a>
+                    <span className="text-olive/45 text-[0.75rem] tracking-[0.12em] uppercase">
+                      Led by {current.brief.lead}
+                    </span>
+                  </div>
+                </div>
+
+                <BriefAffordance
+                  tasting={current}
+                  open={infoOpen}
+                  setOpen={setInfoOpen}
+                  enabled={expanded}
+                  tone="on-cream"
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={closeExpanded}
+                aria-label="Close expanded card"
+                tabIndex={expanded ? 0 : -1}
+                className="bg-cream text-olive absolute -top-4 -right-4 z-50 flex h-11 w-11 items-center justify-center rounded-full text-xl leading-none shadow-lg transition-transform duration-250 ease-[var(--ease-brand)] hover:scale-110"
+              >
+                ×
+              </button>
+            </div>
           </div>
 
           {/* Position indicator */}
