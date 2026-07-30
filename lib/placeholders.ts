@@ -27,8 +27,7 @@ export const heroImage: PlaceholderPhoto = {
  *
  * Client-approved names, copy, pricing and package brief. Role titles are per
  * package (Culinary Curator / Wellness Guide / Experience Curator) and replace
- * generic "chef" wording in the descriptive copy — the package name "The
- * Chef's Grove Table" is a proper name and stays as-is.
+ * generic "chef" wording in the descriptive copy.
  *
  * `brief` is the condensed hover summary: a couple of sentences plus short
  * scannable lines, not a reproduction of the full comparison table. `note` is
@@ -103,7 +102,7 @@ export const featuredTastings: {
     },
   },
   {
-    name: "The Chef's Grove Table",
+    name: "Master Grove Curator",
     subtitle: "Premium Mediterranean Pairing Experience",
     role: "Experience Curator",
     description:

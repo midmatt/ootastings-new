@@ -5,7 +5,7 @@ import PlaceholderImage from "./PlaceholderImage";
 import { featuredTastings } from "@/lib/placeholders";
 
 /**
- * Featured Tasting Flights — a three-card coverflow.
+ * Featured Tasting Experiences — a three-card coverflow.
  *
  * One card holds the centre at full size; the other two sit behind it on either
  * side, smaller, tilted and faded. Arrows, a swipe, a click on a side card, the
@@ -37,7 +37,7 @@ const SIDE_TILT = 12;
 
 const SLIDE_MS = 340;
 const WRAP_MS = 130;
-const AUTOPLAY_MS = 9000;
+const AUTOPLAY_MS = 5000;
 
 type Tasting = (typeof featuredTastings)[number];
 type Wrap = { id: number; seq: number } | null;
@@ -52,39 +52,73 @@ function BriefAffordance({
   setOpen,
   enabled,
   tone = "on-photo",
+  /**
+   * How the brief is sized inside its container. The default fills the
+   * container edge to edge — on a card that means exactly the card's rendered
+   * width, tracked live rather than assumed, so it can never spill onto a
+   * neighbouring card. The detail panel passes a capped width instead, since
+   * edge-to-edge on a 72rem panel would be absurd.
+   */
+  panelClass = "inset-x-0",
 }: {
   tasting: Tasting;
   open: boolean;
   setOpen: (fn: (v: boolean) => boolean) => void;
   enabled: boolean;
   tone?: "on-photo" | "on-cream";
+  panelClass?: string;
 }) {
   const { brief } = tasting;
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // The button and the brief are siblings (the brief has to be sized against
+  // the card, not the button), so leaving one to enter the other would close
+  // it mid-move. A short grace period on close covers the gap.
+  const openNow = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setOpen(() => true);
+  };
+  const closeSoon = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setOpen(() => false), 140);
+  };
+
+  useEffect(
+    () => () => {
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+    },
+    [],
+  );
+
+  // Pointer-typed so a tap does not fire the hover-open path and then get
+  // toggled shut again by its own click.
+  const hover = {
+    onPointerEnter: (e: React.PointerEvent) =>
+      e.pointerType === "mouse" && enabled && openNow(),
+    onPointerLeave: (e: React.PointerEvent) =>
+      e.pointerType === "mouse" && enabled && closeSoon(),
+  };
 
   return (
-    <div
-      className={`absolute right-5 bottom-5 z-30 ${enabled ? "" : "pointer-events-none"}`}
-      // Pointer-typed so a tap does not fire the hover-open path and then get
-      // toggled shut again by its own click.
-      onPointerEnter={(e) =>
-        e.pointerType === "mouse" && enabled && setOpen(() => true)
-      }
-      onPointerLeave={(e) =>
-        e.pointerType === "mouse" && enabled && setOpen(() => false)
-      }
-    >
+    <div className="pointer-events-none absolute inset-0 z-30">
       <button
         type="button"
+        {...hover}
         onClick={(e) => {
           e.stopPropagation();
+          if (closeTimer.current) clearTimeout(closeTimer.current);
           setOpen((v) => !v);
         }}
         aria-label={`What's included in ${tasting.name}`}
         aria-expanded={enabled && open}
         tabIndex={enabled ? 0 : -1}
-        className={`flex h-11 w-11 items-center justify-center rounded-full border text-xl leading-none backdrop-blur-sm transition-all duration-250 ease-[var(--ease-brand)] ${
-          tone === "on-cream"
-            ? "border-olive/25 text-olive hover:bg-olive hover:text-cream"
+        className={`absolute right-5 bottom-5 z-40 flex h-11 w-11 items-center justify-center rounded-full border text-xl leading-none backdrop-blur-sm transition-all duration-250 ease-[var(--ease-brand)] ${
+          enabled ? "pointer-events-auto" : ""
+        } ${
+          // Once the brief is open the button sits on cream, so it has to
+          // switch tone or the × disappears into the panel behind it.
+          tone === "on-cream" || (enabled && open)
+            ? "border-olive/25 bg-cream/80 text-olive hover:bg-olive hover:text-cream"
             : "border-cream/50 bg-cream/20 text-cream hover:bg-cream hover:text-olive"
         }`}
       >
@@ -97,12 +131,13 @@ function BriefAffordance({
         </span>
       </button>
 
-      {/* Wide and shallow: a quick brief, not the comparison table. */}
+      {/* Sized against the card itself — same left and right edges, never wider. */}
       <div
         role="dialog"
         aria-label={`${tasting.name} summary`}
+        {...hover}
         onClick={(e) => e.stopPropagation()}
-        className={`bg-cream rounded-card absolute right-0 bottom-14 w-[min(34rem,78vw)] origin-bottom-right p-6 shadow-[0_28px_60px_-20px_rgba(15,20,5,0.6)] transition-all duration-250 ease-[var(--ease-brand)] ${
+        className={`bg-cream rounded-card absolute bottom-0 z-30 max-h-full origin-bottom overflow-y-auto p-6 pb-20 shadow-[0_28px_60px_-20px_rgba(15,20,5,0.6)] transition-all duration-250 ease-[var(--ease-brand)] ${panelClass} ${
           enabled && open
             ? "pointer-events-auto scale-100 opacity-100"
             : "pointer-events-none scale-95 opacity-0"
@@ -272,7 +307,7 @@ export default function FeaturedTastings() {
                 This Season&apos;s Harvest
               </p>
               <h2 className="display text-cream text-[clamp(2.1rem,5.5vw,4.25rem)] uppercase">
-                Featured Tasting Flights
+                Featured Networking Experiences
               </h2>
             </div>
 
@@ -302,7 +337,7 @@ export default function FeaturedTastings() {
           <div
             ref={stage}
             role="group"
-            aria-label="Featured tasting flights"
+            aria-label="Featured tasting experiences"
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === "ArrowLeft") go(-1);
@@ -479,7 +514,7 @@ export default function FeaturedTastings() {
                 <div className="relative flex flex-col p-6 pb-20 sm:p-10 sm:pb-24 lg:p-12 lg:pb-24">
                   <div className="flex flex-wrap items-center gap-4">
                     <p className="eyebrow text-terracotta">
-                      Featured Tasting Flight
+                      Featured Tasting Experience
                     </p>
                     <span className="bg-olive/8 text-olive/70 hidden rounded-full px-3 py-1 text-[0.6875rem] font-semibold tracking-[0.12em] uppercase md:inline">
                       {current.duration}
@@ -525,6 +560,7 @@ export default function FeaturedTastings() {
                   setOpen={setInfoOpen}
                   enabled={expanded}
                   tone="on-cream"
+                  panelClass="right-0 w-[min(34rem,100%)]"
                 />
               </div>
 
