@@ -26,20 +26,37 @@ export const heroImage: PlaceholderPhoto = {
  * Section 4 — Featured Tastings coverflow.
  *
  * Client-approved names, copy, pricing and package brief. Role titles are per
- * package (Culinary Curator / Wellness Guide / Experience Curator) and replace
+ * package (Culinary Curator / Wellness Coach / Master Grove Curator) and replace
  * generic "chef" wording in the descriptive copy.
  *
  * `brief` is the condensed hover summary: a couple of sentences plus short
  * scannable lines, not a reproduction of the full comparison table. `note` is
  * optional and the layout has room for another line or two beside it.
+ *
+ * Culinary pairings are optional add-ons (priced per guest) — not included in
+ * the booking fee. Shared tasting inclusions live in `tastingSharedInclusions`
+ * and render only in the expanded detail view.
  */
+export const tastingSharedInclusions: string[] = [
+  "A selection of dipping breads and artisanal breadsticks, thoughtfully chosen to complement the tasting.",
+  "A small serving of Mediterranean olives at each place setting.",
+  "Alcoholic beverages are provided by the client — our Curated Team is happy to assist with pairing recommendations.",
+  "Travel outside of Florida is billed to the client.",
+];
+
 export const featuredTastings: {
   name: string;
   subtitle: string;
   role: string;
   description: string;
   duration: string;
-  price: { base: string; includes: string; additional: string };
+  price: {
+    base: string;
+    includes: string;
+    additional: string;
+    /** Optional culinary pairings add-on — card + expanded only, not the condensed popup. */
+    optionalPairings: string;
+  };
   brief: {
     summary: string;
     lead: string;
@@ -55,20 +72,22 @@ export const featuredTastings: {
     subtitle: "The Olive Grove Tasting Menu",
     role: "Culinary Curator",
     description:
-      "Your entry-level tasting — elegant, approachable, and perfect for corporate groups, resorts, and private events. A guided olive oil tasting with three Culinary Curator-crafted pairings, premium Treurer EVOO, and culinary storytelling.",
+      "A guided olive oil journey featuring premium Treurer EVOO, Mediterranean-bright storytelling, and three Culinary Curator-crafted pairings (available as an add-on) that introduce guests to a new way of tasting and experiencing flavor.",
     duration: "45–60 min",
     price: {
       base: "$5,000",
       includes: "up to 30 guests",
       additional: "+$125 per guest after",
+      optionalPairings:
+        "Optional: 3 Culinary Pairings — $82.50/guest (selected by the Curated Team)",
     },
     brief: {
       summary:
-        "A Culinary Curator-guided olive oil tasting with curated pairings, told through the origins of the oil and the story of the grove.",
+        "A guided olive oil journey with premium Treurer EVOO and Mediterranean-bright storytelling — Culinary Curator pairings available as an add-on.",
       lead: "Culinary Curator",
-      includes: "Three pairings, premium Treurer EVOO, standard tasting setup",
+      includes: "Premium Treurer EVOO, guided tasting, Mediterranean storytelling",
       idealFor: "Corporate groups, private events, resorts",
-      addOns: "Wine pairing, mocktails, gift bottles",
+      addOns: "3 Culinary Pairings, wine pairing, mocktails, gift bottles",
     },
     image: {
       src: uns("1653611540493-b3a896319fbf", 1200, 1600),
@@ -78,23 +97,25 @@ export const featuredTastings: {
   {
     name: "Taste & Thrive",
     subtitle: "The Olive Oil Wellness Journey",
-    role: "Wellness Guide",
+    role: "Wellness Coach",
     description:
-      "Your wellness-forward tasting — culinary meets lifestyle. Includes everything in Pressed & Paired plus a certified Wellness Guide session, EVOO health benefits education, and Mediterranean lifestyle guidance. Perfect for retreats, resorts, and corporate wellness programs.",
+      "A wellness-forward tasting designed for retreats, boutique hotels, and groups seeking a deeper connection to Mediterranean living. Led by our Wellness Coach, this experience blends premium Treurer EVOO, curated pairings, and approachable education on anti-inflammatory benefits, mindful tasting, and the Mediterranean lifestyle. It's flavorful, intentional, and crafted to leave guests feeling nourished, inspired, and connected.",
     duration: "60–75 min",
     price: {
-      base: "$5,500",
-      includes: "up to 20 guests",
-      additional: "+$185 per guest after",
+      base: "$6,000",
+      includes: "includes up to 30 guests",
+      additional: "+$185 per additional guest",
+      optionalPairings:
+        "Optional: 3 Culinary Pairings — $82.50/guest (selected by the Curated Team)",
     },
     brief: {
       summary:
-        "Culinary meets lifestyle: a wellness-forward tasting run with a certified Wellness Guide, pairing EVOO education with Mediterranean lifestyle guidance.",
-      lead: "Wellness Guide + Culinary Curator",
+        "A wellness-forward tasting led by our Wellness Coach — premium Treurer EVOO, mindful tasting, and Mediterranean lifestyle education.",
+      lead: "Wellness Coach",
       includes:
-        "Three pairings, premium Treurer EVOO, health coach session, wellness-forward setup",
-      idealFor: "Retreats, wellness programs, boutique hotels",
-      addOns: "Wellness glow shots, 1:1 sessions",
+        "Premium Treurer EVOO, anti-inflammatory education, mindful tasting guidance",
+      idealFor: "Retreats, boutique hotels, wellness programs",
+      addOns: "3 Culinary Pairings, wellness glow shots, 1:1 sessions",
     },
     image: {
       src: uns("1649825319037-f30ea5b611c7", 1200, 1600),
@@ -102,30 +123,31 @@ export const featuredTastings: {
     },
   },
   {
-    name: "Master Grove Curator",
+    name: "The Grove Master Experience",
     subtitle: "Premium Mediterranean Pairing Experience",
-    role: "Experience Curator",
+    role: "Master Grove Curator & Wellness Coach",
     description:
-      "Your luxury tier — a premium, Experience Curator–driven Mediterranean tasting with an elevated multi-course menu, premium EVOO flight, optional wine or mocktail pairings, and signature hospitality touches. Designed for high-end groups and resort VIP activations.",
+      "Your top-tier tasting — immersive, luxurious, and designed for VIP groups, incentive programs, and high-end private events. Hosted by your Master Grove Curator & Wellness Coach, this experience features a premium EVOO flight, elevated Mediterranean pairings, luxury tablescape styling, and storytelling that transports guests straight into the grove. It's dramatic, sensory, and crafted to redefine what a tasting can be.",
     duration: "75–90 min",
     price: {
-      base: "$6,500",
-      includes: "up to 30 guests",
-      additional: "+$325 per guest after",
+      base: "$7,500",
+      includes: "includes up to 30 guests",
+      additional: "+$325 per additional guest",
+      optionalPairings:
+        "Optional: 4 Culinary Pairings — $132.50/guest (selected by the Curated Team)",
     },
     brief: {
       summary:
-        "An elevated, multi-course Mediterranean tasting led by our Experience Curator as a guided culinary journey.",
-      lead: "Experience Curator",
+        "Your top-tier tasting — premium EVOO flight, luxury tablescape, and grove storytelling hosted by your Master Grove Curator & Wellness Coach.",
+      lead: "Master Grove Curator & Wellness Coach",
       includes:
-        "Expanded premium pairings, premium EVOO flight across multiple varietals, luxury tablescape",
-      idealFor: "VIP groups, incentive programs, luxury events",
-      addOns: "Wine pairings, premium gifts, meet & greet",
-      note: "Wellness component available as an add-on.",
+        "Premium EVOO flight, luxury tablescape styling, immersive grove storytelling",
+      idealFor: "VIP groups, incentive programs, high-end private events",
+      addOns: "4 Culinary Pairings, wine pairings, premium gifts, meet & greet",
     },
     image: {
       src: uns("1676471926534-d5c9771909fa", 1200, 1600),
-      alt: "Experience Curator finishing a plated course at a fine dining pass",
+      alt: "Master Grove Curator finishing a plated course at a fine dining pass",
     },
   },
 ];
