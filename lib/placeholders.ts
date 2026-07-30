@@ -130,59 +130,121 @@ export const featuredTastings: {
   },
 ];
 
-/** Section 5 — Tasting Experience grid */
-export const experiences: {
-  title: string;
-  meta: string;
+/**
+ * Section 5 — Enhanced Networking Experiences.
+ * Client-approved packages; no duration was supplied for these, so the cards
+ * carry no duration badge rather than inventing one.
+ */
+export const networkingExperiences: {
+  name: string;
+  tag: string;
+  price: string;
+  brief: {
+    summary: string;
+    lead: string;
+    includes: string;
+    idealFor: string;
+  };
   image: PlaceholderPhoto;
 }[] = [
   {
-    title: "Grove Walk & Tasting",
-    meta: "Seasonal · 2 hrs",
+    name: "The Grove Social Table",
+    tag: "Welcome Receptions & Mixers",
+    price: "$85 per guest",
+    brief: {
+      summary:
+        "A warm, inviting networking table inspired by the olive grove.",
+      lead: "Culinary Curator",
+      includes:
+        "Olive branch greenery + warm wood styling, Mediterranean linens, ambient candles, light tasting bites (optional add-on)",
+      idealFor:
+        "Welcome receptions, corporate mixers, resort lobby activations",
+    },
     image: {
-      src: uns("1601238884151-88a7092027bb", 1200, 900),
-      alt: "Row of ancient olive trees in a grove",
+      src: uns("1619143709283-0397c8fc8abc", 1200, 1500),
+      alt: "Rustic table set with olive greenery, linen napkins and glassware",
     },
   },
   {
-    title: "Harvest Table",
-    meta: "October–December",
+    name: "The Mediterranean Market Mixer",
+    tag: "Retreats & Boutique Hotels",
+    price: "$125 per guest",
+    brief: {
+      summary:
+        "A richer, immersive networking experience inspired by European markets.",
+      lead: "Culinary Curator or Wellness Guide",
+      includes:
+        "Everything in Grove Social Table, market-style props (crates, herbs, lemons, figs), elevated ceramic bowls, seasonal Mediterranean accents, branded networking cards, optional wellness mini-session",
+      idealFor:
+        "Retreats, boutique hotels, wellness groups, conference lounges",
+    },
     image: {
-      src: uns("1634657443172-efbae44fd04b", 1200, 900),
-      alt: "Freshly picked green and black olives in a crate",
+      src: uns("1705500473449-539f7ee4e7bf", 1200, 1500),
+      alt: "Mediterranean market stall stacked with citrus, figs and produce crates",
     },
   },
   {
-    title: "Oil & Cheese Pairing",
-    meta: "Guided · 90 min",
+    name: "The Golden Press VIP Networking Lounge",
+    tag: "VIP & Luxury Activations",
+    price: "$225 per guest",
+    brief: {
+      summary: "Your premium, luxury-forward networking activation.",
+      lead: "Master Grove Curator",
+      includes:
+        "Everything in Market Mixer, premium tablescape styling, gold-accent tasting vessels, elevated floral + olive branch arrangements, Mediterranean lanterns + luxury candles, custom branded menu or networking cards, optional musician/photographer/premium EVOO gifts",
+      idealFor: "VIP receptions, incentive groups, luxury resort activations",
+    },
     image: {
-      src: uns("1517093602195-b40af9688b46", 1200, 900),
-      alt: "Cheese and fruit tasting board from above",
+      src: uns("1608538242779-113f7b19baa1", 1200, 1500),
+      alt: "Long luxury tablescape lit by candles with florals and gold accents",
     },
   },
+];
+
+/** Section 5b — Optional Enhancements reference list. */
+export const optionalEnhancements: {
+  group: string;
+  items: { label: string; price: string; note?: string }[];
+}[] = [
   {
-    title: "The Cellar Collection",
-    meta: "Reserve · 75 min",
-    image: {
-      src: uns("1559725861-2e876132b202", 1200, 900),
-      alt: "Long tasting table set beneath shelves of bottles",
-    },
+    group: "Culinary Enhancements",
+    items: [
+      {
+        label: "Mediterranean grazing board",
+        price: "$18–$28/guest",
+        note: "Included in Packages 2 & 3",
+      },
+      { label: "Signature mocktail pairing", price: "$30/guest" },
+      { label: "Wine pairing upgrade", price: "$55/guest" },
+      { label: "Dessert pairing", price: "$12–$18/guest" },
+    ],
   },
   {
-    title: "Bread & Board",
-    meta: "Walk-in · 45 min",
-    image: {
-      src: uns("1666475877607-ec1cec593b19", 1200, 900),
-      alt: "Sliced bread, olives and a knife on a wooden board",
-    },
+    group: "Wellness Enhancements",
+    items: [
+      { label: "EVOO Glow Shot", price: "$8–$12/guest" },
+      { label: "Health coach mini sessions", price: "$95 each" },
+      { label: "Mediterranean lifestyle workshop", price: "$350–$550" },
+      { label: "Breathwork moment", price: "$250–$400" },
+    ],
   },
   {
-    title: "Sunset Pour",
-    meta: "Fri & Sat · 60 min",
-    image: {
-      src: uns("1609763951640-c0d7bd98b257", 1200, 900),
-      alt: "Olive branch catching low golden sunset light",
-    },
+    group: "Presentation Enhancements",
+    items: [
+      { label: "Premium floral arrangements", price: "$250–$650" },
+      { label: "Luxury candle package", price: "$150–$350" },
+      { label: "Olive grove centerpiece", price: "$175–$300" },
+      { label: "Branded networking cards", price: "$5/guest" },
+      { label: "Custom menu cards", price: "$4/guest" },
+    ],
+  },
+  {
+    group: "Experience Enhancements",
+    items: [
+      { label: "Mediterranean guitarist/violinist", price: "$1,400" },
+      { label: "Photographer", price: "$1,250" },
+      { label: "Guest gift bottles", price: "$45 each" },
+    ],
   },
 ];
 

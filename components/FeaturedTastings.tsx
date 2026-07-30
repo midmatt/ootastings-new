@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import PlaceholderImage from "./PlaceholderImage";
+import BriefAffordance from "./BriefAffordance";
 import { featuredTastings } from "@/lib/placeholders";
 
 /**
@@ -39,161 +40,7 @@ const SLIDE_MS = 340;
 const WRAP_MS = 130;
 const AUTOPLAY_MS = 5000;
 
-type Tasting = (typeof featuredTastings)[number];
 type Wrap = { id: number; seq: number } | null;
-
-/**
- * The "+" affordance and its brief. Used both on the centre card and inside the
- * expanded detail panel, so the same summary is one hover away in either state.
- */
-function BriefAffordance({
-  tasting,
-  open,
-  setOpen,
-  enabled,
-  tone = "on-photo",
-  /**
-   * How the brief is sized inside its container. The default fills the
-   * container edge to edge — on a card that means exactly the card's rendered
-   * width, tracked live rather than assumed, so it can never spill onto a
-   * neighbouring card. The detail panel passes a capped width instead, since
-   * edge-to-edge on a 72rem panel would be absurd.
-   */
-  panelClass = "inset-x-0",
-}: {
-  tasting: Tasting;
-  open: boolean;
-  setOpen: (fn: (v: boolean) => boolean) => void;
-  enabled: boolean;
-  tone?: "on-photo" | "on-cream";
-  panelClass?: string;
-}) {
-  const { brief } = tasting;
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // The button and the brief are siblings (the brief has to be sized against
-  // the card, not the button), so leaving one to enter the other would close
-  // it mid-move. A short grace period on close covers the gap.
-  const openNow = () => {
-    if (closeTimer.current) clearTimeout(closeTimer.current);
-    setOpen(() => true);
-  };
-  const closeSoon = () => {
-    if (closeTimer.current) clearTimeout(closeTimer.current);
-    closeTimer.current = setTimeout(() => setOpen(() => false), 140);
-  };
-
-  useEffect(
-    () => () => {
-      if (closeTimer.current) clearTimeout(closeTimer.current);
-    },
-    [],
-  );
-
-  // Pointer-typed so a tap does not fire the hover-open path and then get
-  // toggled shut again by its own click.
-  const hover = {
-    onPointerEnter: (e: React.PointerEvent) =>
-      e.pointerType === "mouse" && enabled && openNow(),
-    onPointerLeave: (e: React.PointerEvent) =>
-      e.pointerType === "mouse" && enabled && closeSoon(),
-  };
-
-  return (
-    <div className="pointer-events-none absolute inset-0 z-30">
-      <button
-        type="button"
-        {...hover}
-        onClick={(e) => {
-          e.stopPropagation();
-          if (closeTimer.current) clearTimeout(closeTimer.current);
-          setOpen((v) => !v);
-        }}
-        aria-label={`What's included in ${tasting.name}`}
-        aria-expanded={enabled && open}
-        tabIndex={enabled ? 0 : -1}
-        className={`absolute right-5 bottom-5 z-40 flex h-11 w-11 items-center justify-center rounded-full border text-xl leading-none backdrop-blur-sm transition-all duration-250 ease-[var(--ease-brand)] ${
-          enabled ? "pointer-events-auto" : ""
-        } ${
-          // Once the brief is open the button sits on cream, so it has to
-          // switch tone or the × disappears into the panel behind it.
-          tone === "on-cream" || (enabled && open)
-            ? "border-olive/25 bg-cream/80 text-olive hover:bg-olive hover:text-cream"
-            : "border-cream/50 bg-cream/20 text-cream hover:bg-cream hover:text-olive"
-        }`}
-      >
-        <span
-          className={`block transition-transform duration-250 ease-[var(--ease-brand)] ${
-            enabled && open ? "rotate-45" : ""
-          }`}
-        >
-          +
-        </span>
-      </button>
-
-      {/* Sized against the card itself — same left and right edges, never wider. */}
-      <div
-        role="dialog"
-        aria-label={`${tasting.name} summary`}
-        {...hover}
-        onClick={(e) => e.stopPropagation()}
-        className={`bg-cream rounded-card absolute bottom-0 z-30 max-h-full origin-bottom overflow-y-auto p-6 pb-20 shadow-[0_28px_60px_-20px_rgba(15,20,5,0.6)] transition-all duration-250 ease-[var(--ease-brand)] ${panelClass} ${
-          enabled && open
-            ? "pointer-events-auto scale-100 opacity-100"
-            : "pointer-events-none scale-95 opacity-0"
-        }`}
-      >
-        <p className="eyebrow text-terracotta mb-3">What&apos;s included</p>
-
-        <p className="text-olive text-[0.9375rem] leading-[1.55]">
-          {brief.summary}
-        </p>
-
-        <dl className="border-olive/10 mt-4 grid gap-x-8 gap-y-3 border-t pt-4 sm:grid-cols-2">
-          <div>
-            <dt className="text-olive/45 text-[0.625rem] font-semibold tracking-[0.16em] uppercase">
-              Led by
-            </dt>
-            <dd className="text-olive mt-0.5 text-[0.8125rem] leading-snug">
-              {brief.lead}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-olive/45 text-[0.625rem] font-semibold tracking-[0.16em] uppercase">
-              Includes
-            </dt>
-            <dd className="text-olive mt-0.5 text-[0.8125rem] leading-snug">
-              {brief.includes}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-olive/45 text-[0.625rem] font-semibold tracking-[0.16em] uppercase">
-              Ideal for
-            </dt>
-            <dd className="text-olive mt-0.5 text-[0.8125rem] leading-snug">
-              {brief.idealFor}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-olive/45 text-[0.625rem] font-semibold tracking-[0.16em] uppercase">
-              Add-ons available
-            </dt>
-            <dd className="text-olive mt-0.5 text-[0.8125rem] leading-snug">
-              {brief.addOns}
-            </dd>
-          </div>
-          {brief.note && (
-            <div className="sm:col-span-2">
-              <dd className="text-olive/60 text-[0.8125rem] leading-snug italic">
-                {brief.note}
-              </dd>
-            </div>
-          )}
-        </dl>
-      </div>
-    </div>
-  );
-}
 
 export default function FeaturedTastings() {
   const total = featuredTastings.length;
@@ -474,7 +321,8 @@ export default function FeaturedTastings() {
                   {/* Outside the card: the card clips its overflow, and the
                       brief is deliberately wider than the card. */}
                   <BriefAffordance
-                    tasting={tasting}
+                    name={tasting.name}
+                    brief={tasting.brief}
                     open={infoOpen}
                     setOpen={setInfoOpen}
                     enabled={isCenter && !expanded}
@@ -555,7 +403,8 @@ export default function FeaturedTastings() {
                 </div>
 
                 <BriefAffordance
-                  tasting={current}
+                  name={current.name}
+                  brief={current.brief}
                   open={infoOpen}
                   setOpen={setInfoOpen}
                   enabled={expanded}
