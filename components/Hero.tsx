@@ -21,7 +21,7 @@ export default function Hero() {
       <div className="from-olive-deep/70 absolute inset-0 -z-10 bg-gradient-to-r via-transparent to-transparent" />
       <div className="grain absolute inset-0 -z-10" />
 
-      <div className="shell relative pb-16 md:pb-24">
+      <div className="shell relative pb-24 md:pb-28">
         <div className="max-w-4xl">
           <p
             className="eyebrow text-terracotta-soft anim-rise mb-6 flex items-center gap-4"
@@ -51,7 +51,7 @@ export default function Hero() {
           </h1>
 
           <p
-            className="text-cream/80 anim-rise mt-7 max-w-xl text-[1.0625rem] leading-relaxed md:text-lg"
+            className="text-cream/80 anim-rise mt-6 max-w-xl text-[1.1875rem] leading-relaxed md:mt-5 md:text-[1.25rem]"
             style={{ animationDelay: "440ms" }}
           >
             A sensory journey through the world&apos;s finest oils — crafted for
@@ -60,7 +60,7 @@ export default function Hero() {
           </p>
 
           <div
-            className="anim-rise mt-10 flex flex-wrap items-center gap-5"
+            className="anim-rise mt-9 flex flex-wrap items-center gap-5 md:mt-8"
             style={{ animationDelay: "560ms" }}
           >
             <a href="#book" className="btn btn-lg btn-terracotta">
@@ -79,22 +79,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll cue */}
-      <div
-        className="shell anim-rise relative pb-8"
-        style={{ animationDelay: "760ms" }}
-      >
-        {/* The rule is the row's own top border, full shell width — it never
-            connected to the label that used to sit on the left, so it stays. */}
-        <div className="border-cream/15 flex items-center justify-end border-t pt-6">
-          <span className="text-cream/45 flex items-center gap-3 text-xs tracking-[0.2em] uppercase">
-            Scroll
-            <span className="bg-cream/30 relative block h-8 w-px overflow-hidden">
-              <span className="bg-terracotta-soft absolute inset-x-0 top-0 block h-3 animate-[rise_1.8s_ease-in-out_infinite]" />
-            </span>
-          </span>
-        </div>
-      </div>
     </section>
   );
 }
