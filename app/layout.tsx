@@ -30,7 +30,15 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${fraunces.variable} ${workSans.variable}`}>
-      <body className="bg-cream text-ink antialiased">{children}</body>
+      {/*
+        suppressHydrationWarning: browser extensions (Grammarly and friends)
+        inject attributes like data-gr-ext-installed onto <body> before React
+        hydrates, which React reports as a mismatch. It only affects this
+        element's own attributes, not any content inside it.
+      */}
+      <body className="bg-cream text-ink antialiased" suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }

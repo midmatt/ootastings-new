@@ -81,11 +81,14 @@ drawer closes on tap and releases the body scroll lock.
 ## The pour section (`components/PourMission.tsx`)
 
 The mission section and the pour animation are one thing: a two-column layout
-with the copy on the left and a bottle-and-glass scene on the right. Scrolling
-into it tips the bottle into its pour angle, sends a curved stream from the
-spout into the glass, fills the glass, and settles — then holds. Scroll-linked,
-never scroll-jacked; the page scrolls at its normal speed while the scene is
-sticky in frame. Copy and graphic never overlap at any width.
+with the copy on the left and a bottle-and-glass scene on the right. The bottle
+tips into its pour angle, a curved stream leaves the spout into the glass, the
+glass fills, and the copy settles alongside it.
+
+The sequence **plays itself once when the section scrolls into view** — it is
+not tied to scroll position. The section is an ordinary-height block: it never
+pins, never holds the page, and the reader does not have to keep scrolling to
+drive the animation.
 
 Scene notes:
 
@@ -98,24 +101,23 @@ Scene notes:
 - Liquid is olive-gold (`#ADA54B → #63752F`) with a lighter surface, a surface
   highlight and an elongated sheen down the body — the cues that read oil rather
   than water. Bottle and glass are thin-line olive at the same stroke weight.
-- Timing: tilt 0–16% of the section's scroll, stream 13–44%, fill 24–60%, copy
-  staggered from 30% and fully settled by 88%, leaving a calm beat where the
-  whole scene is readable.
+- Timing over the `DURATION` (2200 ms): tilt 0–16%, stream 13–44%, fill 24–60%,
+  copy staggered from 30% and settled by 88%. `TRIGGER_RATIO` is how much of the
+  section must be on screen before it starts.
 
 Behaviour and performance:
 
-- Progress comes from the section's position in the viewport, read in a passive
-  scroll listener coalesced into one `requestAnimationFrame` per frame. Values
-  go straight to element styles/attributes via refs, so React never re-renders
-  during scroll; only transforms, opacity and one SVG `rotate` change.
-  Measured at 1440×900: 16.7 ms average frame, 17.7 ms worst — locked 60 fps.
-- **Touch devices, viewports under 768px, `prefers-reduced-motion: reduce`, and
-  no-JS** all get the finished frame — bottle tilted, glass full, copy visible,
-  graphic stacked above the text on mobile — with no scroll listener attached.
-  The inline SVG defaults *are* the end state, so the static case needs nothing
-  to run.
-- The section itself must not carry `overflow-hidden`: that would make it a
-  scroll container and silently break the sticky scene inside it.
+- An IntersectionObserver starts one rAF loop, which stops the moment the
+  animation completes — nothing runs while the page is idle, and the observer
+  disconnects after the first trigger so the pour reads as a finished action
+  rather than a loop.
+- Values go straight to element styles/attributes via refs, so React never
+  re-renders while it plays; only transforms, opacity and one SVG `rotate`
+  change.
+- `prefers-reduced-motion: reduce` and no-JS both get the finished frame —
+  bottle tilted, glass full, copy visible — with no observer and no rAF. The
+  inline SVG defaults *are* the end state, so the static case needs nothing to
+  run.
 
 ## Placeholders — running list for client follow-up
 

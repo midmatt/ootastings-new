@@ -1,21 +1,25 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 /**
- * "Good olive oil is a conversation" — the mission section, with a scroll-linked
- * olive oil pour as its dominant visual. Bottle and glass are both in frame; the
- * bottle tilts in, then a curved stream leaves the spout and fills the glass,
- * while the copy settles alongside it. Scroll-linked, never scroll-jacked.
+ * "Good olive oil is a conversation" — the mission section, with an olive oil
+ * pour as its dominant visual. Bottle and glass are both in frame; the bottle
+ * tilts in, a curved stream leaves the spout and fills the glass, and the copy
+ * settles alongside it.
  *
- * Static end state (bottle tilted, glass full, copy visible) is what renders on
- * touch devices, on narrow viewports, with reduced motion, and with no JS —
- * inline defaults are the finished frame, and the scroll loop only takes over
- * once it's established that motion is wanted.
+ * The sequence plays **once, on its own, when the section comes into view** —
+ * it is not tied to scroll position, so the section is a normal-height block
+ * that never pins or slows the page down as you scroll past it.
  *
- * Performance: passive scroll listener coalesced into one rAF; values written
- * straight to element styles/attributes via refs so React never re-renders
- * during scroll; only transforms, opacity and one SVG rotate attribute change.
+ * Static end state (bottle tilted, glass full, copy visible) is what renders
+ * with reduced motion and with no JS: the inline SVG defaults are the finished
+ * frame, so nothing has to run for the static case.
+ *
+ * Performance: one rAF loop for the length of the animation and nothing after
+ * it; values are written straight to element styles/attributes via refs so
+ * React never re-renders while it plays; only transforms, opacity and one SVG
+ * rotate attribute change.
  */
 
 /**
@@ -30,6 +34,11 @@ const TILT_SWING = 45;
 
 /** How far the stream's reveal mask travels, in viewBox units. */
 const STREAM_TRAVEL = 175;
+
+/** Length of the whole pour, in ms, and how much of the section must be on
+ *  screen before it starts. */
+const DURATION = 2200;
+const TRIGGER_RATIO = 0.35;
 
 const clamp = (v: number, min = 0, max = 1) => Math.min(max, Math.max(min, v));
 
@@ -47,54 +56,50 @@ export default function PourMission() {
   const glowRef = useRef<SVGEllipseElement>(null);
   const copyRefs = useRef<(HTMLElement | null)[]>([]);
 
-  const [animated, setAnimated] = useState(false);
-
-  useEffect(() => {
-    const motionOk = window.matchMedia(
-      "(prefers-reduced-motion: no-preference)",
-    );
-    const roomy = window.matchMedia("(min-width: 768px)");
-    // Touch devices get the static graphic — scroll-linked motion is unreliable
-    // against momentum scrolling and the brief calls for a simple fade there.
-    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
-
-    const evaluate = () =>
-      setAnimated(motionOk.matches && roomy.matches && finePointer.matches);
-
-    evaluate();
-    const lists = [motionOk, roomy, finePointer];
-    lists.forEach((l) => l.addEventListener("change", evaluate));
-    return () => lists.forEach((l) => l.removeEventListener("change", evaluate));
-  }, []);
-
   useEffect(() => {
     const host = hostRef.current;
-    if (!host || !animated) {
-      render(1); // settled end state
+    if (!host) return;
+
+    const stillMotion =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Reduced motion, or no IntersectionObserver: leave the finished frame up.
+    if (stillMotion || typeof IntersectionObserver === "undefined") {
+      render(1);
       return;
     }
 
+    // Rewind to the start now, before the section can be seen, then wait for it
+    // to come into view.
+    render(0);
+
     let frame = 0;
+    let start = 0;
 
-    const update = () => {
-      frame = 0;
-      const rect = host.getBoundingClientRect();
-      const travel = rect.height - window.innerHeight;
-      render(travel > 0 ? clamp(-rect.top / travel) : 0);
+    const step = (now: number) => {
+      if (!start) start = now;
+      const p = clamp((now - start) / DURATION);
+      render(p);
+      frame = p < 1 ? requestAnimationFrame(step) : 0;
     };
 
-    const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(update);
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          observer.disconnect(); // plays once — it reads as a finished action
+          frame = requestAnimationFrame(step);
+        });
+      },
+      { threshold: TRIGGER_RATIO },
+    );
 
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
+    observer.observe(host);
 
     return () => {
+      observer.disconnect();
       if (frame) cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
     };
 
     function render(p: number) {
@@ -143,7 +148,7 @@ export default function PourMission() {
         el.style.transform = `translate3d(0, ${((1 - t) * 22).toFixed(2)}px, 0)`;
       });
     }
-  }, [animated]);
+  }, []);
 
   const setCopyRef = (i: number) => (el: HTMLElement | null) => {
     copyRefs.current[i] = el;
@@ -153,16 +158,9 @@ export default function PourMission() {
     <section
       id="mission"
       ref={hostRef}
-      /* no overflow-hidden here: it would break position:sticky below */
-      className={`bg-cream anchor-offset relative isolate ${
-        animated ? "h-[210vh]" : ""
-      }`}
+      className="bg-cream anchor-offset relative isolate"
     >
-      <div
-        className={`relative flex items-center overflow-hidden ${
-          animated ? "sticky top-0 h-[100svh]" : "section-pad"
-        }`}
-      >
+      <div className="section-pad relative flex items-center overflow-hidden">
         <div className="grain pointer-events-none absolute inset-0" />
 
         <div className="shell relative w-full">
