@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import PlaceholderImage from "./PlaceholderImage";
+import AddToPackageButton from "./AddToPackageButton";
 import BriefAffordance from "./BriefAffordance";
 import ExpandedDetail from "./ExpandedDetail";
 import { featuredTastings } from "@/lib/placeholders";
@@ -359,9 +360,15 @@ export default function FeaturedTastings() {
               </p>
 
               <div className="mt-6 flex flex-wrap items-center gap-4 sm:mt-8">
-                <a href="#book" className="btn btn-lg btn-terracotta">
-                  Reserve this tasting
-                </a>
+                <AddToPackageButton
+                  item={{
+                    kind: "tasting",
+                    name: current.name,
+                    priceLabel: `${current.price.base} base · ${current.price.includes}`,
+                    priceNote: current.price.additional,
+                    image: current.image,
+                  }}
+                />
                 <span className="text-olive/45 text-[0.75rem] tracking-[0.12em] uppercase">
                   Led by {current.brief.lead}
                 </span>

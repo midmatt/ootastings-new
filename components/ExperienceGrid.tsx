@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import AddToPackageButton from "./AddToPackageButton";
 import BriefAffordance from "./BriefAffordance";
 import ExpandedDetail from "./ExpandedDetail";
 import PlaceholderImage from "./PlaceholderImage";
@@ -185,9 +186,14 @@ export default function ExperienceGrid() {
               </dl>
 
               <div className="mt-6 flex flex-wrap items-center gap-4 sm:mt-8">
-                <a href="#book" className="btn btn-lg btn-terracotta">
-                  Reserve this table
-                </a>
+                <AddToPackageButton
+                  item={{
+                    kind: "table",
+                    name: shown.name,
+                    priceLabel: shown.price,
+                    image: shown.image,
+                  }}
+                />
               </div>
             </ExpandedDetail>
         </div>

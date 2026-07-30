@@ -119,6 +119,27 @@ Behaviour and performance:
   inline SVG defaults *are* the end state, so the static case needs nothing to
   run.
 
+## Quote requests (Resend)
+
+The package section at the foot of the page posts to `app/api/inquiry/route.ts`,
+which formats the form fields plus the selected package and emails them via
+[Resend](https://resend.com).
+
+**This does not send until two things are set up:**
+
+1. A Resend account (free tier is enough) and an API key in `.env.local`:
+   ```
+   RESEND_API_KEY=re_your_key_here
+   ```
+   Copy `.env.example` as a starting point. The key is never committed.
+2. A real recipient in `TO_ADDRESS` in the route — it currently reads
+   `TODO_CLIENT_EMAIL@example.com`.
+
+Until then the route returns a 503 and the form shows a clear error with a
+mailto fallback; it never reports a false success. `FROM_ADDRESS` uses Resend's
+`onboarding@resend.dev` sender, which works immediately for testing — swap it
+for an address on a domain verified in Resend before launch.
+
 ## Placeholders — running list for client follow-up
 
 Everything below is filler and must be replaced before launch.
@@ -143,10 +164,10 @@ grep -rn "data-placeholder" .    # or search the rendered page
 
 **Not wired up (UI only):**
 
-- "Book a Tasting" / "Reserve Your Tasting" point at the in-page `#book`
-  anchor. Route these to the real booking tool once it's chosen.
-- Tasting Club email form validates and shows a confirmation state, but does not
-  submit anywhere.
+- "Book a Tasting" / "Reserve Your Tasting" point at `#book`, the package and
+  quote-request section. That is the intended destination now, not a stub.
+- Quote request form is wired to Resend but needs an API key and the client's
+  real recipient address (see above).
 - Nav links and footer links point at in-page anchors — they become real routes
   when `/tastings`, `/our-story`, `/private-events`, `/visit` are built.
 - Social links point at instagram.com / facebook.com placeholders.
