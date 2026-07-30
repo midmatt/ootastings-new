@@ -5,7 +5,7 @@ import PlaceholderImage from "./PlaceholderImage";
 import AddToPackageButton from "./AddToPackageButton";
 import BriefAffordance from "./BriefAffordance";
 import ExpandedDetail from "./ExpandedDetail";
-import { featuredTastings } from "@/lib/placeholders";
+import { featuredTastings, tastingSharedInclusions } from "@/lib/placeholders";
 
 /**
  * Featured Tasting Experiences — a three-card coverflow.
@@ -288,11 +288,14 @@ export default function FeaturedTastings() {
                       <p className="text-terracotta-soft mt-3.5 flex flex-wrap items-baseline gap-x-2 text-[1.05rem] font-semibold sm:mt-4 sm:text-[1.15rem]">
                         {tasting.price.base}
                         <span className="text-cream/55 text-[0.6875rem] font-medium tracking-[0.12em] uppercase">
-                          base · {tasting.price.includes}
+                          booking fee · {tasting.price.includes}
                         </span>
                       </p>
                       <p className="text-cream/55 mt-1 text-[0.6875rem] tracking-[0.06em]">
                         {tasting.price.additional}
+                      </p>
+                      <p className="text-cream/50 mt-1 text-[0.6875rem] leading-snug tracking-[0.04em]">
+                        {tasting.price.optionalPairings}
                       </p>
 
                       <p className="text-cream/75 mt-2.5 text-[0.75rem] leading-[1.5] sm:mt-3 sm:text-[0.875rem] sm:leading-[1.6]">
@@ -343,15 +346,20 @@ export default function FeaturedTastings() {
                 {current.subtitle}
               </p>
 
-              <div className="border-olive/12 mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-y py-3.5 sm:mt-6 sm:py-4">
-                <span className="display text-terracotta text-[1.75rem] leading-none">
-                  {current.price.base}
-                </span>
-                <span className="text-olive/60 text-[0.75rem] font-semibold tracking-[0.14em] uppercase">
-                  base · {current.price.includes}
-                </span>
-                <span className="text-ink/55 w-full text-[0.8125rem]">
+              <div className="border-olive/12 mt-5 flex flex-col gap-1.5 border-y py-3.5 sm:mt-6 sm:py-4">
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <span className="display text-terracotta text-[1.75rem] leading-none">
+                    {current.price.base}
+                  </span>
+                  <span className="text-olive/60 text-[0.75rem] font-semibold tracking-[0.14em] uppercase">
+                    booking fee · {current.price.includes}
+                  </span>
+                </div>
+                <span className="text-ink/55 text-[0.8125rem]">
                   {current.price.additional}
+                </span>
+                <span className="text-olive/55 text-[0.8125rem] leading-snug italic">
+                  {current.price.optionalPairings}
                 </span>
               </div>
 
@@ -359,12 +367,29 @@ export default function FeaturedTastings() {
                 {current.description}
               </p>
 
+              <div className="border-olive/10 mt-6 max-w-xl border-t pt-5 sm:mt-7">
+                <p className="text-olive/55 text-[0.6875rem] font-semibold tracking-[0.16em] uppercase">
+                  Every tasting includes
+                </p>
+                <ul className="text-ink/65 mt-3 space-y-2 text-[0.8125rem] leading-relaxed sm:text-[0.875rem]">
+                  {tastingSharedInclusions.map((item) => (
+                    <li key={item} className="flex gap-2.5">
+                      <span
+                        aria-hidden="true"
+                        className="bg-terracotta/80 mt-2 h-1 w-1 shrink-0 rounded-full"
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
               <div className="mt-6 flex flex-wrap items-center gap-4 sm:mt-8">
                 <AddToPackageButton
                   item={{
                     kind: "tasting",
                     name: current.name,
-                    priceLabel: `${current.price.base} base · ${current.price.includes}`,
+                    priceLabel: `${current.price.base} booking fee · ${current.price.includes}`,
                     priceNote: current.price.additional,
                     image: current.image,
                   }}

@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const UTILITY_LINKS = [
-  { label: "Our Story", href: "#story" },
+  { label: "Our Story", href: "#mission" },
   { label: "Private Events", href: "#private-events" },
   { label: "Visit Us", href: "#visit" },
   { label: "Contact", href: "#contact" },

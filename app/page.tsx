@@ -1,5 +1,4 @@
 import AtmosphereCollage from "@/components/AtmosphereCollage";
-import BrandStatement from "@/components/BrandStatement";
 import ExperienceGrid from "@/components/ExperienceGrid";
 import FeaturedTastings from "@/components/FeaturedTastings";
 import Footer from "@/components/Footer";
@@ -31,7 +30,6 @@ export default function HomePage() {
         <Testimonial />
         <AtmosphereCollage />
         <InstagramStrip />
-        <BrandStatement />
         <PackageSection />
       </main>
       <Footer />

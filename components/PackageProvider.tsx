@@ -13,7 +13,7 @@ export type PackageKind = "tasting" | "table";
 export type PackageItem = {
   kind: PackageKind;
   name: string;
-  /** Headline price, e.g. "$5,000 base · up to 30 guests". */
+  /** Headline price, e.g. "$5,000 booking fee · up to 30 guests". */
   priceLabel: string;
   /** Secondary price line, e.g. "+$125 per guest after". */
   priceNote?: string;

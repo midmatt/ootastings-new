@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
  */
 const NAV_LINKS = [
   { label: "Tastings", href: "#tastings" },
-  { label: "Our Story", href: "#story" },
+  { label: "Our Story", href: "#mission" },
   { label: "Private Events", href: "#private-events" },
   { label: "Visit Us", href: "#visit" },
 ];
