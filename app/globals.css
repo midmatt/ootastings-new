@@ -1,0 +1,270 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------
+   OOT Tastings — brand theme tokens
+   Olive + cream sampled directly from the OOT logo artwork.
+   Terracotta is the chosen warm accent (CTAs, rules, small details).
+   --------------------------------------------------------------- */
+@theme {
+  --color-olive: #374515;
+  --color-olive-deep: #232d0d;
+  --color-olive-mid: #4d6122;
+  --color-olive-soft: #8a9a5b;
+  --color-olive-tint: #dfe0cb;
+
+  --color-cream: #f5f0e4;
+  --color-linen: #ece5d3;
+  --color-ink: #241f14;
+
+  --color-terracotta: #c06b3c;
+  --color-terracotta-deep: #a1552b;
+  --color-terracotta-soft: #e0a878;
+
+  --font-display: var(--font-fraunces), "Playfair Display", Georgia, serif;
+  --font-sans: var(--font-work-sans), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 1.5rem;
+  --radius-tile: 1.25rem;
+
+  --shadow-soft: 0 18px 40px -24px rgb(35 45 13 / 0.45);
+  --shadow-lift: 0 28px 60px -28px rgb(35 45 13 / 0.55);
+
+  --ease-brand: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--color-terracotta);
+    color: var(--color-cream);
+  }
+
+  ::-webkit-scrollbar {
+    height: 8px;
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--color-olive) 35%, transparent);
+    border-radius: 999px;
+  }
+}
+
+@layer components {
+  /* Section vertical rhythm: 80px mobile → 120px+ desktop */
+  .section-pad {
+    padding-block: clamp(4.5rem, 9vw, 8.5rem);
+  }
+
+  .shell {
+    width: 100%;
+    max-width: 84rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 4vw, 3.5rem);
+  }
+
+  .display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 0.94;
+    letter-spacing: -0.02em;
+  }
+
+  .eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+  }
+
+  /* Pill buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    transition:
+      background-color 250ms var(--ease-brand),
+      color 250ms var(--ease-brand),
+      border-color 250ms var(--ease-brand),
+      transform 250ms var(--ease-brand),
+      box-shadow 250ms var(--ease-brand);
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+  .btn:active {
+    transform: translateY(0);
+  }
+
+  .btn-lg {
+    padding: 1.0625rem 2.25rem;
+    font-size: 0.9375rem;
+  }
+  .btn-md {
+    padding: 0.8125rem 1.6rem;
+    font-size: 0.8125rem;
+  }
+
+  .btn-terracotta {
+    background-color: var(--color-terracotta);
+    color: var(--color-cream);
+    box-shadow: 0 14px 30px -18px rgb(160 84 42 / 0.9);
+  }
+  .btn-terracotta:hover {
+    background-color: var(--color-terracotta-deep);
+    box-shadow: 0 20px 38px -18px rgb(160 84 42 / 0.95);
+  }
+
+  .btn-olive {
+    background-color: var(--color-olive);
+    color: var(--color-cream);
+  }
+  .btn-olive:hover {
+    background-color: var(--color-olive-deep);
+  }
+
+  .btn-outline-cream {
+    border: 1px solid color-mix(in srgb, var(--color-cream) 45%, transparent);
+    color: var(--color-cream);
+  }
+  .btn-outline-cream:hover {
+    background-color: var(--color-cream);
+    color: var(--color-olive);
+  }
+
+  .btn-outline-olive {
+    border: 1px solid color-mix(in srgb, var(--color-olive) 30%, transparent);
+    color: var(--color-olive);
+  }
+  .btn-outline-olive:hover {
+    background-color: var(--color-olive);
+    color: var(--color-cream);
+  }
+
+  /* Paper-grain atmosphere layer used on flat colour blocks */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
+  }
+
+  /* Keeps section headings clear of the sticky header when jumped to by anchor */
+  .anchor-offset {
+    scroll-margin-top: clamp(5.5rem, 8vw, 7rem);
+  }
+
+  .hairline {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      color-mix(in srgb, currentColor 35%, transparent),
+      transparent
+    );
+  }
+}
+
+@layer utilities {
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Entrance choreography
+   --------------------------------------------------------------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes drift {
+  from {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes wipe {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.anim-rise {
+  animation: rise 900ms var(--ease-brand) both;
+}
+.anim-drift {
+  animation: drift 1600ms var(--ease-brand) both;
+}
+.anim-wipe {
+  transform-origin: left;
+  animation: wipe 900ms var(--ease-brand) both;
+}
+
+/* Scroll-reveal: elements start hidden, .is-visible is applied by the observer */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 32px, 0);
+  transition:
+    opacity 800ms var(--ease-brand),
+    transform 800ms var(--ease-brand);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
