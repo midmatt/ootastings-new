@@ -98,13 +98,9 @@ Scene notes:
 - Liquid is olive-gold (`#ADA54B → #63752F`) with a lighter surface, a surface
   highlight and an elongated sheen down the body — the cues that read oil rather
   than water. Bottle and glass are thin-line olive at the same stroke weight.
-- Timing: tilt 0–10% of the sequence, stream 7–26%, fill 15–44%, copy staggered
-  from 18% and fully settled by 70%. The sequence starts while the section is
-  still scrolling in (`ENTRY_LEAD`, 60% of a viewport) rather than waiting for
-  the sticky pin — otherwise a whole screen of scroll passes before the bottle
-  moves. At 1440x900 that means the bottle is tilted by ~120px of scroll and the
-  glass is full by ~500px, landing right as the section settles into place and
-  leaving the pinned remainder as a calm beat.
+- Timing: tilt 0–16% of the section's scroll, stream 13–44%, fill 24–60%, copy
+  staggered from 30% and fully settled by 88%, leaving a calm beat where the
+  whole scene is readable.
 
 Behaviour and performance:
 

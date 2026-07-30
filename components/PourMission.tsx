@@ -31,12 +31,6 @@ const TILT_SWING = 45;
 /** How far the stream's reveal mask travels, in viewBox units. */
 const STREAM_TRAVEL = 175;
 
-/**
- * How much of the viewport height the sequence gets while the section is still
- * scrolling in, before the sticky pin takes over.
- */
-const ENTRY_LEAD = 0.6;
-
 const clamp = (v: number, min = 0, max = 1) => Math.min(max, Math.max(min, v));
 
 /** Normalise v into [a,b], then smoothstep. */
@@ -85,13 +79,8 @@ export default function PourMission() {
     const update = () => {
       frame = 0;
       const rect = host.getBoundingClientRect();
-      const vh = window.innerHeight;
-      // Start the sequence while the section is still entering the viewport —
-      // waiting for the sticky pin wastes a full screen of scroll before the
-      // bottle so much as moves.
-      const lead = vh * ENTRY_LEAD;
-      const travel = lead + rect.height - vh;
-      render(travel > 0 ? clamp((lead - rect.top) / travel) : 0);
+      const travel = rect.height - window.innerHeight;
+      render(travel > 0 ? clamp(-rect.top / travel) : 0);
     };
 
     const onScroll = () => {
@@ -110,11 +99,11 @@ export default function PourMission() {
 
     function render(p: number) {
       // 1. bottle tilts from upright into the pour angle
-      const tilt = phase(p, 0, 0.1);
+      const tilt = phase(p, 0, 0.16);
       // 2. oil leaves the spout and runs down the curve
-      const stream = phase(p, 0.07, 0.26);
-      // 3. the glass fills and holds
-      const level = phase(p, 0.15, 0.44);
+      const stream = phase(p, 0.13, 0.44);
+      // 3. the glass fills, slowly, and holds
+      const level = phase(p, 0.24, 0.6);
 
       if (bottleRef.current) {
         // Composed with the parent's static rotate(-115): the bottle starts
@@ -142,10 +131,10 @@ export default function PourMission() {
 
       // copy trails the pour so reading is never rushed
       const copyPhases: [number, number][] = [
-        [0.18, 0.34],
-        [0.24, 0.46],
-        [0.34, 0.62],
-        [0.42, 0.7],
+        [0.3, 0.46],
+        [0.36, 0.62],
+        [0.48, 0.8],
+        [0.56, 0.88],
       ];
       copyRefs.current.forEach((el, i) => {
         if (!el) return;
@@ -166,7 +155,7 @@ export default function PourMission() {
       ref={hostRef}
       /* no overflow-hidden here: it would break position:sticky below */
       className={`bg-cream anchor-offset relative isolate ${
-        animated ? "h-[165vh]" : ""
+        animated ? "h-[210vh]" : ""
       }`}
     >
       <div
