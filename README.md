@@ -12,6 +12,21 @@ npm run dev        # http://localhost:3000
 npm run build      # production build
 ```
 
+## Deployment
+
+Live at https://ootastings-new.vercel.app (Vercel, deploys from `main`).
+
+`vercel.json` pins `"framework": "nextjs"`. Keep it: the project was created
+with the Framework Preset set to **Other**, which made Vercel publish the
+`public/` folder as a static site — every asset resolved but `/` returned 404,
+because no Next.js route was ever deployed. Settings in `vercel.json` override
+the dashboard, so the preset can't drift back.
+
+Requires Next 16 (`next lint` no longer exists in 16, so there is no lint
+script). If a local build fails with `Cannot find module for page: /_not-found`,
+`node_modules` is stale from an older Next — `rm -rf node_modules .next && npm
+install` clears it.
+
 ## Brand system
 
 Tokens live in `app/globals.css` under `@theme` — use the Tailwind classes, not
