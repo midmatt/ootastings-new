@@ -21,9 +21,16 @@ import {
 export default function ExperienceGrid() {
   const [openId, setOpenId] = useState<number | null>(null);
   const [expandedId, setExpandedId] = useState<number | null>(null);
-  const expandedItem =
-    expandedId === null ? null : networkingExperiences[expandedId];
+  // The panel is always mounted so it can animate in and out; `shownId` keeps
+  // its content in place through the closing transition.
+  const [shownId, setShownId] = useState(0);
+  const isExpanded = expandedId !== null;
+  const shown = networkingExperiences[shownId];
   const closeExpanded = useCallback(() => setExpandedId(null), []);
+  const expand = (i: number) => {
+    setShownId(i);
+    setExpandedId(i);
+  };
 
   return (
     <section
@@ -56,13 +63,13 @@ export default function ExperienceGrid() {
             aria-label="Close details"
             onClick={closeExpanded}
             className={`bg-olive-deep/45 absolute inset-x-[-50vw] -inset-y-[200vh] z-20 cursor-default transition-opacity duration-300 ${
-              expandedItem ? "opacity-100" : "pointer-events-none opacity-0"
+              isExpanded ? "opacity-100" : "pointer-events-none opacity-0"
             }`}
           />
 
           <ul
             className={`col-start-1 row-start-1 grid grid-cols-1 gap-x-6 gap-y-12 transition-opacity duration-340 ease-[var(--ease-brand)] sm:grid-cols-2 lg:grid-cols-3 ${
-              expandedItem ? "pointer-events-none opacity-15" : ""
+              isExpanded ? "pointer-events-none opacity-15" : ""
             }`}
           >
           {networkingExperiences.map((item, i) => (
@@ -72,11 +79,11 @@ export default function ExperienceGrid() {
                   role="button"
                   tabIndex={0}
                   aria-expanded={expandedId === i}
-                  onClick={() => setExpandedId(i)}
+                  onClick={() => expand(i)}
                   onKeyDown={(e) => {
                     if (e.key !== "Enter" && e.key !== " ") return;
                     e.preventDefault();
-                    setExpandedId(i);
+                    expand(i);
                   }}
                   className="rounded-tile shadow-soft group-hover:shadow-lift relative aspect-[4/5] cursor-pointer overflow-hidden transition-shadow duration-300 ease-[var(--ease-brand)]"
                 >
@@ -116,14 +123,13 @@ export default function ExperienceGrid() {
           </ul>
 
           {/* ---------- expanded detail panel ---------- */}
-          {expandedItem && (
-            <ExpandedDetail
-              open
+          <ExpandedDetail
+              open={isExpanded}
               onClose={closeExpanded}
-              image={expandedItem.image}
-              index={expandedId!}
-              name={expandedItem.name}
-              brief={expandedItem.brief}
+              image={shown.image}
+              index={shownId}
+              name={shown.name}
+              brief={shown.brief}
               className="col-start-1 row-start-1 justify-self-center self-center"
             >
               <p className="eyebrow text-terracotta">
@@ -131,15 +137,15 @@ export default function ExperienceGrid() {
               </p>
 
               <h3 className="display text-olive mt-3 text-[clamp(1.75rem,3.4vw,2.9rem)] leading-[1.05] sm:mt-4">
-                {expandedItem.name}
+                {shown.name}
               </h3>
               <p className="text-olive/60 mt-2 font-[family-name:var(--font-fraunces)] text-[1rem] italic">
-                {expandedItem.tag}
+                {shown.tag}
               </p>
 
               <div className="border-olive/12 mt-5 flex flex-wrap items-baseline gap-x-3 border-y py-3.5 sm:mt-6 sm:py-4">
                 <span className="display text-terracotta text-[1.75rem] leading-none">
-                  {expandedItem.price.split(" per ")[0]}
+                  {shown.price.split(" per ")[0]}
                 </span>
                 <span className="text-olive/60 text-[0.75rem] font-semibold tracking-[0.14em] uppercase">
                   per guest
@@ -147,7 +153,7 @@ export default function ExperienceGrid() {
               </div>
 
               <p className="text-ink/70 mt-5 max-w-xl text-[0.875rem] leading-[1.7] sm:mt-6 sm:text-[0.9375rem] sm:leading-[1.75]">
-                {expandedItem.brief.summary}
+                {shown.brief.summary}
               </p>
 
               {/* the expanded view carries the complete list, unlike the brief */}
@@ -157,7 +163,7 @@ export default function ExperienceGrid() {
                     Led by
                   </dt>
                   <dd className="text-ink/70 mt-1 text-[0.8125rem] leading-snug">
-                    {expandedItem.brief.lead}
+                    {shown.brief.lead}
                   </dd>
                 </div>
                 <div>
@@ -165,7 +171,7 @@ export default function ExperienceGrid() {
                     Ideal for
                   </dt>
                   <dd className="text-ink/70 mt-1 text-[0.8125rem] leading-snug">
-                    {expandedItem.brief.idealFor}
+                    {shown.brief.idealFor}
                   </dd>
                 </div>
                 <div className="sm:col-span-2">
@@ -173,7 +179,7 @@ export default function ExperienceGrid() {
                     Includes
                   </dt>
                   <dd className="text-ink/70 mt-1 text-[0.8125rem] leading-snug">
-                    {expandedItem.includesFull}
+                    {shown.includesFull}
                   </dd>
                 </div>
               </dl>
@@ -184,7 +190,6 @@ export default function ExperienceGrid() {
                 </a>
               </div>
             </ExpandedDetail>
-          )}
         </div>
 
         {/* ---------- optional enhancements ---------- */}
