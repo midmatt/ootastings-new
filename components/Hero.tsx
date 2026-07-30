@@ -54,8 +54,9 @@ export default function Hero() {
             className="text-cream/80 anim-rise mt-7 max-w-xl text-[1.0625rem] leading-relaxed md:text-lg"
             style={{ animationDelay: "440ms" }}
           >
-            An hour at the table with five oils, a little bread, and someone who
-            can tell you exactly which hillside each one came from.
+            A sensory journey through the world&apos;s finest oils — crafted for
+            curious palates, culinary lovers, and groups seeking a signature
+            experience.
           </p>
 
           <div
@@ -83,8 +84,9 @@ export default function Hero() {
         className="shell anim-rise relative pb-8"
         style={{ animationDelay: "760ms" }}
       >
-        <div className="border-cream/15 flex items-center justify-between border-t pt-6">
-          <span className="eyebrow text-cream/45">Est. Harvest to Table</span>
+        {/* The rule is the row's own top border, full shell width — it never
+            connected to the label that used to sit on the left, so it stays. */}
+        <div className="border-cream/15 flex items-center justify-end border-t pt-6">
           <span className="text-cream/45 flex items-center gap-3 text-xs tracking-[0.2em] uppercase">
             Scroll
             <span className="bg-cream/30 relative block h-8 w-px overflow-hidden">
