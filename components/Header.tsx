@@ -8,8 +8,9 @@ import { useEffect, useState } from "react";
  * Single-page build: every nav item is an anchor on the home page, and each one
  * points at a full section rather than a sub-block, so no link lands somewhere
  * that reads as a dead end. In page order: the story, the tasting experiences,
- * the networking tables, and the footer's contact details. The CTA carries the
- * booking section on its own.
+ * the networking tables. There is deliberately no "Contact" item — the page has
+ * no contact section, so it could only have pointed at the inquiry form (which
+ * the CTA already carries) or dropped the reader at the footer.
  *
  * Plain <a> is used rather than next/link so the browser handles the jump
  * natively — that keeps `scroll-behavior: smooth` and each section's
@@ -22,7 +23,6 @@ const NAV_LINKS = [
   { label: "Our Story", href: "/#mission" },
   { label: "Tastings", href: "/#featured" },
   { label: "Tables", href: "/#tables" },
-  { label: "Contact", href: "/#contact" },
 ];
 
 /** No /book route exists yet, so the CTA lands on the booking/enquiry block. */
