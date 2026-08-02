@@ -35,7 +35,7 @@ export default function ExperienceGrid() {
 
   return (
     <section
-      id="tastings"
+      id="tables"
       className="bg-cream anchor-offset relative isolate overflow-hidden"
     >
       <div className="grain absolute inset-0" />

@@ -149,7 +149,7 @@ export default function PackageSection() {
                   </a>{" "}
                   and a{" "}
                   <a
-                    href="#tastings"
+                    href="#tables"
                     className="text-olive underline decoration-terracotta/60 underline-offset-4"
                   >
                     networking table

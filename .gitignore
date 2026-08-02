@@ -8,3 +8,6 @@ next-env.d.ts
 !.env.example
 
 .vercel
+
+# Source photography — kept locally, too large for git
+ootastings_photos/

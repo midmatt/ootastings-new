@@ -3,16 +3,22 @@ import Link from "next/link";
 import { INSTAGRAM_URL } from "./InstagramStrip";
 
 /**
- * Hash links are rooted at "/" so they still resolve from a real route such as
- * /legal; `route` marks the entries that are pages rather than anchors.
+ * The same destinations the header carries, plus the booking section and the
+ * legal page. "Contact" is not repeated here — this row sits inside the footer,
+ * which is itself #contact. Hash links are rooted at "/" so they still resolve
+ * from a real route such as /legal; `route` marks entries that are pages rather
+ * than anchors.
  */
 const UTILITY_LINKS = [
   { label: "Our Story", href: "/#mission" },
-  { label: "Private Events", href: "/#private-events" },
-  { label: "Visit Us", href: "/#visit" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Tastings", href: "/#featured" },
+  { label: "Tables", href: "/#tables" },
+  { label: "Build Your Package", href: "/#book" },
   { label: "Legal", href: "/legal", route: true },
 ];
+
+const CONTACT_EMAIL = "info@jovellhg.com";
+const CONTACT_PHONE = "305.900.7092";
 
 const SOCIALS = [
   {
@@ -27,15 +33,8 @@ const SOCIALS = [
     ),
   },
   {
-    label: "Facebook",
-    href: "https://facebook.com",
-    path: (
-      <path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.5-1.5H16.6V4.4A20 20 0 0 0 14.4 4.3c-2.2 0-3.7 1.3-3.7 3.9v2.3H8v3h2.7V21z" />
-    ),
-  },
-  {
     label: "Email",
-    href: "mailto:hello@ootastings.com",
+    href: `mailto:${CONTACT_EMAIL}`,
     path: (
       <>
         <rect x="3" y="5" width="18" height="14" rx="3" />
@@ -71,22 +70,33 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Nav target: Visit Us */}
-          <div id="visit" className="anchor-offset">
-            <p className="eyebrow text-terracotta-soft mb-4">Visit Us</p>
-            {/* TODO: client copy needed — real address, hours and directions. */}
-            <p className="text-cream/70 text-sm leading-relaxed">
-              The Tasting Room
-              <br />
-              Address line one
-              <br />
-              Address line two
+          {/* The footer is the page's #contact target, so it carries the real
+              contact details. (The old Visit Us block was placeholder address
+              lines; it comes back when there is an address to put in it.) */}
+          <div>
+            <p className="eyebrow text-terracotta-soft mb-4">Get in Touch</p>
+            <p className="text-cream/70 max-w-[30ch] text-sm leading-relaxed">
+              Tastings are booked by inquiry — tell us the date and the room and
+              we will shape the rest.
             </p>
-            <p className="text-cream/45 mt-3 text-sm leading-relaxed">
-              Wed–Sun, 11:00–19:00
-              <br />
-              Tastings by reservation
-            </p>
+            <ul className="mt-4 space-y-1.5 text-sm">
+              <li>
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="text-cream/70 hover:text-cream transition-colors duration-200"
+                >
+                  {CONTACT_EMAIL}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={`tel:+1${CONTACT_PHONE.replace(/\D/g, "")}`}
+                  className="text-cream/70 hover:text-cream transition-colors duration-200"
+                >
+                  {CONTACT_PHONE}
+                </a>
+              </li>
+            </ul>
           </div>
 
           {/* Nav target: Private Events */}
