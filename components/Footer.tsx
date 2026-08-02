@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { INSTAGRAM_URL } from "./InstagramStrip";
 
 /**
  * Hash links are rooted at "/" so they still resolve from a real route such as
@@ -16,7 +17,7 @@ const UTILITY_LINKS = [
 const SOCIALS = [
   {
     label: "Instagram",
-    href: "https://instagram.com",
+    href: INSTAGRAM_URL,
     path: (
       <>
         <rect x="3" y="3" width="18" height="18" rx="5" />

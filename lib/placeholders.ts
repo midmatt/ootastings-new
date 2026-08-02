@@ -321,31 +321,3 @@ export const atmosphere: PlaceholderPhoto[] = [
     alt: "Shelves of bottles and produce in a warm-lit tasting room",
   },
 ];
-
-/** Section 8 — Instagram strip */
-export const instagramTiles: PlaceholderPhoto[] = [
-  {
-    src: uns("1698775942613-3e9fc114b2a1", 700, 700),
-    alt: "Bright green olives packed together",
-  },
-  {
-    src: uns("1768689033119-c3ac1e437d20", 700, 700),
-    alt: "Golden olive oil drizzling from a spout",
-  },
-  {
-    src: uns("1652282565092-874e3a9c67b1", 700, 700),
-    alt: "Olives resting in hand-turned wooden bowls",
-  },
-  {
-    src: uns("1582536446725-5ad9e6ef0535", 700, 700),
-    alt: "Bread, olives and a bottle of oil photographed from above",
-  },
-  {
-    src: uns("1672940711883-754b2fdefa1c", 700, 700),
-    alt: "A lone olive tree beside old stone ruins",
-  },
-  {
-    src: uns("1591122523233-22037c1dec9f", 700, 700),
-    alt: "Olives ripening on the branch",
-  },
-];
