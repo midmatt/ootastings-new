@@ -63,14 +63,16 @@ export default function Hero() {
             className="anim-rise mt-9 flex flex-wrap items-center gap-5 md:mt-8"
             style={{ animationDelay: "560ms" }}
           >
+            {/* Same wording as the header CTA — two orange buttons on one
+                screen saying different things reads as two different actions. */}
             <a href="#book" className="btn btn-lg btn-terracotta">
-              Reserve Your Tasting
+              Book a Tasting
             </a>
             <a
               href="#featured"
               className="text-cream/85 group inline-flex items-center gap-2 text-sm font-medium"
             >
-              See the flights
+              See the tastings
               <span className="transition-transform duration-300 ease-[var(--ease-brand)] group-hover:translate-x-1">
                 →
               </span>
