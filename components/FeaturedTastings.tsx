@@ -277,7 +277,11 @@ export default function FeaturedTastings() {
                       {tasting.duration}
                     </span>
 
-                    <div className="absolute inset-x-0 bottom-0 p-5 pr-16 sm:p-7 sm:pr-24">
+                    {/* Still bottom-anchored and content-sized, but capped so it
+                        can never grow up into the two badges — 4rem is the band
+                        they sit in. `overflow-hidden` keeps that cap honest if
+                        the copy ever outgrows the card. */}
+                    <div className="absolute inset-x-0 bottom-0 max-h-[calc(100%-4rem)] overflow-hidden p-5 pr-16 sm:p-7 sm:pr-24">
                       <h3 className="display text-cream text-[1.45rem] leading-tight sm:text-[1.8rem]">
                         {tasting.name}
                       </h3>
@@ -294,11 +298,14 @@ export default function FeaturedTastings() {
                       <p className="text-cream/55 mt-1 text-[0.6875rem] tracking-[0.06em]">
                         {tasting.price.additional}
                       </p>
-                      <p className="text-cream/50 mt-1 text-[0.6875rem] leading-snug tracking-[0.04em]">
+                      <p className="text-cream/50 mt-1 line-clamp-2 text-[0.6875rem] leading-snug tracking-[0.04em] sm:line-clamp-none">
                         {tasting.price.optionalPairings}
                       </p>
 
-                      <p className="text-cream/75 mt-2.5 text-[0.75rem] leading-[1.5] sm:mt-3 sm:text-[0.875rem] sm:leading-[1.6]">
+                      {/* The card is a teaser — the expanded panel carries the
+                          description in full, so it is clamped here to what the
+                          card can actually hold at each width. */}
+                      <p className="text-cream/75 mt-2.5 line-clamp-3 text-[0.75rem] leading-[1.5] min-[420px]:line-clamp-5 sm:mt-3 sm:line-clamp-6 sm:text-[0.875rem] sm:leading-[1.6] lg:line-clamp-none">
                         {tasting.description}
                       </p>
 
