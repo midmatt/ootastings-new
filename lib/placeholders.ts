@@ -6,8 +6,12 @@
  * carries `data-placeholder="true"` (see components/PlaceholderImage.tsx), so
  * placeholders can be found in the DOM as well as in the source.
  *
- * TODO: client photography needed — replace all entries below before launch.
+ * Networking table cards use client photography from the Vercel Blob store
+ * (see `clientPhoto` in lib/atmosphere.ts). Remaining Unsplash entries are
+ * still placeholders and should be swapped before launch.
  */
+
+import { clientPhoto } from "@/lib/atmosphere";
 
 const uns = (id: string, w: number, h: number) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&h=${h}&q=80`;
@@ -188,8 +192,8 @@ export const networkingExperiences: {
     includesFull:
       "Olive branch greenery + warm wood styling, Mediterranean linens, ambient candles, light tasting bites (optional add-on)",
     image: {
-      src: uns("1619143709283-0397c8fc8abc", 1200, 1500),
-      alt: "Rustic table set with olive greenery, linen napkins and glassware",
+      src: clientPhoto("a92a6791"),
+      alt: "Olive oil tasting menu framed beside a candle and olive greenery",
     },
   },
   {
@@ -208,8 +212,8 @@ export const networkingExperiences: {
     includesFull:
       "Everything in Grove Social Table, market-style props (crates, herbs, lemons, figs), elevated ceramic bowls, seasonal Mediterranean accents, branded networking cards, optional wellness mini-session",
     image: {
-      src: uns("1705500473449-539f7ee4e7bf", 1200, 1500),
-      alt: "Mediterranean market stall stacked with citrus, figs and produce crates",
+      src: clientPhoto("a92a6981"),
+      alt: "Mediterranean Market Mixer networking table with market-style styling",
     },
   },
   {
@@ -226,8 +230,8 @@ export const networkingExperiences: {
     includesFull:
       "Everything in Market Mixer, premium tablescape styling, gold-accent tasting vessels, elevated floral + olive branch arrangements, Mediterranean lanterns + luxury candles, custom branded menu or networking cards, optional musician/photographer/premium EVOO gifts",
     image: {
-      src: uns("1608538242779-113f7b19baa1", 1200, 1500),
-      alt: "Long luxury tablescape lit by candles with florals and gold accents",
+      src: clientPhoto("a92a6879"),
+      alt: "Golden Press VIP networking lounge with elevated tablescape styling",
     },
   },
 ];
@@ -295,29 +299,5 @@ export const testimonials: { quote: string; name: string }[] = [
     quote:
       "I never realized olive oil could be part of a wellness routine. This experience opened my eyes — and my palate.",
     name: "Matthew Vella",
-  },
-];
-
-/** Section 7 — Atmosphere collage */
-export const atmosphere: PlaceholderPhoto[] = [
-  {
-    src: uns("1609238000857-303bf54099b1", 1200, 1500),
-    alt: "Warm-lit tasting room with a round table and timber racking",
-  },
-  {
-    src: uns("1618100790047-3da47dcd5727", 1400, 950),
-    alt: "Late sun coming through the branches of an olive grove",
-  },
-  {
-    src: uns("1560274764-b90dcadb2dfa", 1000, 1300),
-    alt: "Wooden table set with bread, a dish of olive oil and a drink",
-  },
-  {
-    src: uns("1673213936348-3ad0a1c4270c", 1000, 1000),
-    alt: "Tasting board and bottle on a table beside a window",
-  },
-  {
-    src: uns("1636089651344-ad2ce3fc7bda", 1200, 950),
-    alt: "Shelves of bottles and produce in a warm-lit tasting room",
   },
 ];

@@ -10,6 +10,12 @@ const nextConfig: NextConfig = {
         hostname: "images.unsplash.com",
         pathname: "/**",
       },
+      // Client photography, served from the project's Vercel Blob store.
+      {
+        protocol: "https",
+        hostname: "5mimhywtvsblan4k.public.blob.vercel-storage.com",
+        pathname: "/**",
+      },
     ],
   },
 };
