@@ -75,9 +75,9 @@ export default function Footer() {
               lines; it comes back when there is an address to put in it.) */}
           <div>
             <p className="eyebrow text-terracotta-soft mb-4">Get in Touch</p>
-            <p className="text-cream/70 max-w-[30ch] text-sm leading-relaxed">
-              Tastings are booked by inquiry — tell us the date and the room and
-              we will shape the rest.
+            <p className="text-cream/70 max-w-[34ch] text-sm leading-relaxed">
+              Tastings are booked by inquiry — give us the date and the room, and
+              we&rsquo;ll craft the full drizzle-driven experience around it.
             </p>
             <ul className="mt-4 space-y-1.5 text-sm">
               <li>
@@ -102,9 +102,10 @@ export default function Footer() {
           {/* Nav target: Private Events */}
           <div id="private-events" className="anchor-offset">
             <p className="eyebrow text-terracotta-soft mb-4">Private Events</p>
-            <p className="text-cream/70 max-w-[30ch] text-sm leading-relaxed">
-              Group tastings, corporate tables and long-table dinners for up to
-              fourteen guests.
+            <p className="text-cream/70 max-w-[34ch] text-sm leading-relaxed">
+              Group tastings, corporate connection tables, and
+              swirl-and-drizzle networking experiences crafted for all event
+              formats and team-building engagements.
             </p>
             <a
               href="/#book"
