@@ -1,11 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 
+/**
+ * Hash links are rooted at "/" so they still resolve from a real route such as
+ * /legal; `route` marks the entries that are pages rather than anchors.
+ */
 const UTILITY_LINKS = [
-  { label: "Our Story", href: "#mission" },
-  { label: "Private Events", href: "#private-events" },
-  { label: "Visit Us", href: "#visit" },
-  { label: "Contact", href: "#contact" },
+  { label: "Our Story", href: "/#mission" },
+  { label: "Private Events", href: "/#private-events" },
+  { label: "Visit Us", href: "/#visit" },
+  { label: "Contact", href: "/#contact" },
+  { label: "Legal", href: "/legal", route: true },
 ];
 
 const SOCIALS = [
@@ -91,7 +96,7 @@ export default function Footer() {
               fourteen guests.
             </p>
             <a
-              href="#book"
+              href="/#book"
               className="text-cream group mt-4 inline-flex items-center gap-2 text-sm font-medium"
             >
               Enquire about a private tasting
@@ -104,15 +109,19 @@ export default function Footer() {
 
         <div className="border-cream/12 mt-14 flex flex-wrap items-center justify-between gap-6 border-t pt-8">
           <nav className="flex flex-wrap gap-x-8 gap-y-3">
-            {UTILITY_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="text-cream/70 hover:text-cream text-sm transition-colors duration-200"
-              >
-                {link.label}
-              </a>
-            ))}
+            {UTILITY_LINKS.map((link) => {
+              const className =
+                "text-cream/70 hover:text-cream text-sm transition-colors duration-200";
+              return link.route ? (
+                <Link key={link.label} href={link.href} className={className}>
+                  {link.label}
+                </Link>
+              ) : (
+                <a key={link.label} href={link.href} className={className}>
+                  {link.label}
+                </a>
+              );
+            })}
           </nav>
 
           <div className="flex items-center gap-3">

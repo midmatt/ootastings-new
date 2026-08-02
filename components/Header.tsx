@@ -5,20 +5,23 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 /**
- * Single-page build: every nav item is an in-page anchor. Plain <a> is used
- * rather than next/link so the browser handles the jump natively — that keeps
- * `scroll-behavior: smooth` and each section's `scroll-margin-top` in play.
- * These become real routes once /tastings, /our-story etc. exist.
+ * Single-page build: every nav item is an anchor on the home page. Plain <a> is
+ * used rather than next/link so the browser handles the jump natively — that
+ * keeps `scroll-behavior: smooth` and each section's `scroll-margin-top` in
+ * play. They are rooted at "/" rather than bare hashes so they still work from
+ * a real route like /legal; on the home page that is a same-document fragment
+ * jump, so nothing reloads. These become real routes once /tastings,
+ * /our-story etc. exist.
  */
 const NAV_LINKS = [
-  { label: "Tastings", href: "#tastings" },
-  { label: "Our Story", href: "#mission" },
-  { label: "Private Events", href: "#private-events" },
-  { label: "Visit Us", href: "#visit" },
+  { label: "Tastings", href: "/#tastings" },
+  { label: "Our Story", href: "/#mission" },
+  { label: "Private Events", href: "/#private-events" },
+  { label: "Visit Us", href: "/#visit" },
 ];
 
 /** No /book route exists yet, so the CTA lands on the booking/enquiry block. */
-const BOOK_HREF = "#book";
+const BOOK_HREF = "/#book";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
