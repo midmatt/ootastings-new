@@ -10,6 +10,7 @@ import PackageSection from "@/components/PackageSection";
 import PackageTray from "@/components/PackageTray";
 import PourMission from "@/components/PourMission";
 import Testimonial from "@/components/Testimonial";
+import VideoLounge from "@/components/VideoLounge";
 
 /**
  * Home page — UI pass only.
@@ -25,6 +26,7 @@ export default function HomePage() {
       <main>
         <Hero />
         <PourMission />
+        <VideoLounge />
         <FeaturedTastings />
         <ExperienceGrid />
         <Testimonial />

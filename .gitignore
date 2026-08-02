@@ -11,3 +11,9 @@ next-env.d.ts
 
 # Source photography — kept locally, too large for git
 ootastings_photos/
+
+# Working media drops at the repo root (served copies live in public/)
+/*.MP4
+/*.mp4
+/*.mov
+/*.MOV
