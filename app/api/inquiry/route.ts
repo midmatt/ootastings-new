@@ -4,22 +4,15 @@ import { Resend } from "resend";
 /**
  * Quote request handler.
  *
- * Requires two things before it can actually send:
- *   1. RESEND_API_KEY in .env.local (free account at https://resend.com)
- *   2. a real recipient address in TO_ADDRESS below
- * Until both exist the route returns a clear error, which the form surfaces to
- * the guest — it never reports a false success.
+ * Needs RESEND_API_KEY in the environment (.env.local locally, project settings
+ * on Vercel). Without it the route returns a clear error, which the form
+ * surfaces to the guest — it never reports a false success.
  */
 
-// TODO: replace with the client's real inbox before launch.
-const TO_ADDRESS = "TODO_CLIENT_EMAIL@example.com";
+const TO_ADDRESS = "Joseph@ootastings.com";
 
-/**
- * Resend only delivers from a verified domain. onboarding@resend.dev works out
- * of the box for testing; swap it for something like hello@ootastings.com once
- * the domain is verified in Resend.
- */
-const FROM_ADDRESS = "OOT Tastings <onboarding@resend.dev>";
+/** Resend only delivers from a verified domain — ootastings.com is verified. */
+const FROM_ADDRESS = "OOT Tastings <Joseph@ootastings.com>";
 
 type Selection = { kind: string; name: string; price: string };
 
