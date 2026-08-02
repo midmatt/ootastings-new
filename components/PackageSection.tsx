@@ -140,7 +140,7 @@ export default function PackageSection() {
             ) : (
               <div className="border-olive/15 mt-8 rounded-2xl border border-dashed p-8">
                 <p className="text-ink/70 text-[0.9375rem] leading-relaxed">
-                  Nothing added yet. Pick a{" "}
+                  Nothing added yet — your drizzle awaits. Choose a{" "}
                   <a
                     href="#featured"
                     className="text-olive underline decoration-terracotta/60 underline-offset-4"
@@ -154,8 +154,8 @@ export default function PackageSection() {
                   >
                     networking table
                   </a>{" "}
-                  above to build your package — or just send us a message and
-                  we&apos;ll help you shape it.
+                  above to build your perfect package or simply send us a
+                  message and we&rsquo;ll swirl something custom just for you.
                 </p>
               </div>
             )}
