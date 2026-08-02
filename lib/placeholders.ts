@@ -279,11 +279,24 @@ export const optionalEnhancements: {
   },
 ];
 
-/** Section 6 — Testimonial portrait */
-export const testimonialPortrait: PlaceholderPhoto = {
-  src: uns("1592621385645-e41659e8aabe", 400, 400),
-  alt: "Portrait of a smiling tasting guest",
-};
+/** Section 6 — Guest testimonials. Client-supplied; attribution is name only. */
+export const testimonials: { quote: string; name: string }[] = [
+  {
+    quote:
+      "I thought I knew olive oil. I didn’t. This experience flipped my palate, my expectations, and honestly… my whole relationship with flavor.",
+    name: "Holly Sauer",
+  },
+  {
+    quote:
+      "Our team hasn’t stopped talking about it. It was the perfect blend of education, connection, and Mediterranean magic.",
+    name: "Dennis Meaney",
+  },
+  {
+    quote:
+      "I never realized olive oil could be part of a wellness routine. This experience opened my eyes — and my palate.",
+    name: "Matthew Vella",
+  },
+];
 
 /** Section 7 — Atmosphere collage */
 export const atmosphere: PlaceholderPhoto[] = [
