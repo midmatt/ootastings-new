@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 /**
- * "Good olive oil is a conversation" — the mission section, with an olive oil
+ * "Olive oil is a conversation" — the mission section, with an olive oil
  * pour as its dominant visual. Bottle and glass are both in frame; the bottle
  * tilts in, a curved stream leaves the spout and fills the glass, and the copy
  * settles alongside it.
@@ -178,20 +178,38 @@ export default function PourMission() {
                 ref={setCopyRef(1)}
                 className="display text-olive text-[clamp(2rem,4.6vw,3.6rem)] text-balance uppercase will-change-[opacity,transform]"
               >
-                Good olive oil is a{" "}
+                Olive oil is a{" "}
                 <em className="font-normal italic">conversation</em>, not a
                 condiment.
               </h2>
 
-              <p
+              {/* One ref for the whole block: the body fades in as a single
+                  beat, so the pour choreography keeps its four cues. */}
+              <div
                 ref={setCopyRef(2)}
-                className="text-ink/70 mt-8 max-w-lg text-[1.0625rem] leading-[1.75] will-change-[opacity,transform]"
+                className="text-ink/70 mt-8 max-w-lg space-y-5 text-[1.0625rem] leading-[1.75] will-change-[opacity,transform]"
               >
-                {/* TODO: client copy needed */}
-                Olive oil is a conversation, not a condiment. We pour, you taste,
-                and somewhere around the third glass it reveals its story — the
-                grove, the harvest, and the family who brought it to life.
-              </p>
+                <p>
+                  It invites curiosity, connection, and a moment of pause — the
+                  kind of moment that brings people together.
+                </p>
+                <p>
+                  At JoVell Hospitality Group, we never deliver a
+                  one-size-fits-all tasting. We craft an experience around your
+                  story — your values, your culture, your purpose, and your
+                  guests.
+                </p>
+                <p>
+                  Every tasting becomes a dialogue: between flavor and memory,
+                  between your team and ours, between who you are and how you
+                  show up in the world.
+                </p>
+                <p>
+                  Your guests leave not only with new connections, but with a
+                  deeper understanding of what makes your organization unique —
+                  and a completely new way of tasting everything else.
+                </p>
+              </div>
 
               <div
                 ref={setCopyRef(3)}
