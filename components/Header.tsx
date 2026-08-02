@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
  */
 const NAV_LINKS = [
   { label: "Our Story", href: "/#mission" },
+  { label: "Meet Our Health Coach", href: "/#health-coach" },
   { label: "Tastings", href: "/#featured" },
   { label: "Tables", href: "/#tables" },
 ];

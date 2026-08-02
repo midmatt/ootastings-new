@@ -3,6 +3,7 @@ import ExperienceGrid from "@/components/ExperienceGrid";
 import FeaturedTastings from "@/components/FeaturedTastings";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import HealthCoach from "@/components/HealthCoach";
 import Hero from "@/components/Hero";
 import InstagramStrip from "@/components/InstagramStrip";
 import PackageProvider from "@/components/PackageProvider";
@@ -26,6 +27,7 @@ export default function HomePage() {
       <main>
         <Hero />
         <PourMission />
+        <HealthCoach />
         <VideoLounge />
         <FeaturedTastings />
         <ExperienceGrid />
