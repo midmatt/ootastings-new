@@ -6,15 +6,19 @@
  * repo — the footer contact block, lib/placeholders.ts and the redesign spec.
  * Nothing is invented; unconfirmed fields are marked TODO rather than guessed.
  *
- * Canonical host: the spec and the verified Resend sending domain both name
- * ootastings.com, so that is the canonical. The site currently *serves* from
- * ootastings-new.vercel.app, so until the apex domain is attached in Vercel,
- * override this with NEXT_PUBLIC_SITE_URL to keep canonicals pointing at a host
- * that actually resolves. See the README note added alongside this file.
+ * Canonical host: **www**.ootastings.com. Verified against the live site —
+ * https://www.ootastings.com returns 200 with no redirects, while the apex
+ * https://ootastings.com returns a 308 to it. A canonical, sitemap <loc> or
+ * robots Host: pointing at the apex therefore names a URL that immediately
+ * redirects, which is exactly what those fields must not do.
+ *
+ * If the Vercel redirect is ever flipped to prefer the apex, change this one
+ * constant — canonicals, Open Graph URLs, robots.txt and sitemap.xml all derive
+ * from it. NEXT_PUBLIC_SITE_URL overrides it for preview deployments.
  */
 
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://ootastings.com"
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.ootastings.com"
 ).replace(/\/$/, "");
 
 export const SITE_NAME = "OOT Tastings";
@@ -25,13 +29,13 @@ export const PARENT_ORG = "JoVell Hospitality Group";
 export const TAGLINE = "Sip. Swirl. Taste the Grove.";
 
 /**
- * Contact details as published in the site footer, which is the page's
- * #contact target. Note the repo currently carries three different addresses
- * (footer info@jovellhg.com, inquiry API Joseph@ootastings.com, package section
- * hello@ootastings.com); the footer value is used here because it is the one
- * presented to visitors as the contact address.
+ * The single public-facing contact address. Everything visitor-facing — footer,
+ * legal page, inquiry-failure fallback, structured data — uses this one.
+ *
+ * Joseph@ootastings.com stays in app/api/inquiry/route.ts only, as the backend
+ * address form submissions are delivered to; it is not published anywhere.
  */
-export const CONTACT_EMAIL = "info@jovellhg.com";
+export const CONTACT_EMAIL = "info@ootastings.com";
 export const CONTACT_PHONE_DISPLAY = "305.900.7092";
 export const CONTACT_PHONE_E164 = "+13059007092";
 

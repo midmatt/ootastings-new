@@ -49,11 +49,16 @@ business has no premises the public visits, so there is no address to publish �
 LocalBusiness/Restaurant without a real, confirmed address; fabricating one
 breaks Google's structured-data policy.
 
-**Canonical domain:** `ootastings.com`, per the redesign spec and the verified
-Resend sending domain. The site currently serves from `ootastings-new.vercel.app`,
-so set `NEXT_PUBLIC_SITE_URL` (see `.env.example`) until the apex domain is
-attached. The www -> apex redirect is a Vercel **Domains** setting, not an
-in-app one — adding it to `next.config.ts` as well risks a redirect loop.
+**Canonical domain:** `https://www.ootastings.com` — **www, not the apex.**
+Verified against the live site: `www.ootastings.com` returns 200 with no
+redirects, while `ootastings.com` returns a 308 to it. Canonical tags, sitemap
+`<loc>` values and the robots `Host:` must all name the final URL rather than
+one that redirects, so they derive from `SITE_URL` in `lib/seo.ts`.
+
+If the Vercel redirect is ever flipped to prefer the apex, change that one
+constant and everything follows. The apex -> www redirect itself is a Vercel
+**Domains** setting, not an in-app one — adding it to `next.config.ts` as well
+risks a redirect loop.
 
 ## Brand system
 

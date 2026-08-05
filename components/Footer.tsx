@@ -17,7 +17,7 @@ const UTILITY_LINKS = [
   { label: "Legal", href: "/legal", route: true },
 ];
 
-const CONTACT_EMAIL = "info@jovellhg.com";
+const CONTACT_EMAIL = "info@ootastings.com";
 const CONTACT_PHONE = "305.900.7092";
 
 const SOCIALS = [

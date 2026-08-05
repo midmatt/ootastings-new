@@ -311,10 +311,10 @@ export default function LegalPage() {
                       </dt>
                       <dd>
                         <a
-                          href="mailto:info@jovellhg.com"
+                          href="mailto:info@ootastings.com"
                           className="text-terracotta hover:text-terracotta-deep underline underline-offset-4 transition-colors duration-200"
                         >
-                          info@jovellhg.com
+                          info@ootastings.com
                         </a>
                       </dd>
                     </div>

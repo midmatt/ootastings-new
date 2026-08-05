@@ -320,8 +320,8 @@ export default function PackageSection() {
                 {status === "error" && (
                   <p className="border-terracotta/30 bg-terracotta/8 text-terracotta-deep mt-5 rounded-2xl border px-4 py-3 text-[0.8125rem] leading-relaxed">
                     {error} You can also reach us directly at{" "}
-                    <a href="mailto:hello@ootastings.com" className="underline">
-                      hello@ootastings.com
+                    <a href="mailto:info@ootastings.com" className="underline">
+                      info@ootastings.com
                     </a>
                     .
                   </p>
