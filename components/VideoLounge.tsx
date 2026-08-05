@@ -3,9 +3,11 @@
 import Reveal from "./Reveal";
 
 /**
- * OOTastings Video Lounge — two vertical screens between the mission block
- * and the featured experiences. Slot one plays the client reel; slot two is a
- * quiet placeholder until the second video lands.
+ * OOTastings Video Lounge — two screens between the mission block and the
+ * featured experiences. The reels were shot in different orientations, so each
+ * frame carries its own aspect ratio and the columns are split 9:16 to match.
+ * That split makes the portrait frame exactly as tall as the landscape frame is
+ * wide, so the pair reads as one composition instead of two mismatched boxes.
  *
  * The heading stays always-visible (not behind scroll-reveal) so the section
  * cannot disappear if the observer is slow or hydration lags. Only the video
@@ -13,14 +15,18 @@ import Reveal from "./Reveal";
  */
 const VIDEOS: {
   title: string;
-  src?: string;
+  src: string;
+  aspect: string;
 }[] = [
   {
     title: "From the Grove",
     src: "/videos/lounge-01.mp4",
+    aspect: "aspect-[9/16]",
   },
   {
-    title: "Coming Soon",
+    title: "At the Table",
+    src: "/videos/lounge-02.mp4",
+    aspect: "aspect-[16/9]",
   },
 ];
 
@@ -44,36 +50,20 @@ export default function VideoLounge() {
           </p>
         </div>
 
-        <div className="mx-auto mt-14 grid max-w-4xl gap-6 sm:mt-16 sm:grid-cols-2 sm:gap-8">
+        <div className="mx-auto mt-14 grid max-w-5xl items-center gap-6 sm:mt-16 sm:grid-cols-[9fr_16fr] sm:gap-8">
           {VIDEOS.map((video, i) => (
             <Reveal key={video.title} delay={i * 120} as="figure">
-              <div className="rounded-card shadow-soft relative aspect-[9/16] overflow-hidden bg-olive-deep">
-                {video.src ? (
-                  <video
-                    className="absolute inset-0 h-full w-full object-cover"
-                    src={video.src}
-                    controls
-                    playsInline
-                    preload="metadata"
-                    aria-label={video.title}
-                  />
-                ) : (
-                  <div
-                    className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-8 text-center"
-                    aria-label="Second lounge video — coming soon"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="border-cream/25 flex h-16 w-16 items-center justify-center rounded-full border"
-                    >
-                      <span className="border-l-cream/70 ml-1 h-0 w-0 border-y-[7px] border-l-[12px] border-y-transparent" />
-                    </span>
-                    <p className="eyebrow text-terracotta-soft">Coming soon</p>
-                    <p className="text-cream/55 max-w-[14rem] text-[0.875rem] leading-relaxed">
-                      A second reel will land here — same frame, same seat.
-                    </p>
-                  </div>
-                )}
+              <div
+                className={`rounded-card shadow-soft relative overflow-hidden bg-olive-deep ${video.aspect}`}
+              >
+                <video
+                  className="absolute inset-0 h-full w-full object-cover"
+                  src={video.src}
+                  controls
+                  playsInline
+                  preload="metadata"
+                  aria-label={video.title}
+                />
               </div>
               <figcaption className="text-olive/55 mt-4 text-center text-[0.6875rem] font-semibold tracking-[0.16em] uppercase">
                 {video.title}
