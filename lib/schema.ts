@@ -72,8 +72,9 @@ export function organizationSchema() {
     },
     // Service area rather than address: the team travels to the client.
     areaServed: { "@type": "State", name: SERVICE_AREA },
-    // TODO: add a Facebook / LinkedIn URL to `sameAs` if those profiles exist —
-    // only the Instagram account is referenced anywhere in the repo.
+    // `sameAs` is Instagram-only by decision, not by omission: @evootastings is
+    // the only profile the brand runs. Do not pad this list — an unverified or
+    // wrong profile URL here actively misleads entity resolution.
     // TODO: add `foundingDate` and a legal `taxID`/`vatID` if those are wanted
     // for entity disambiguation; neither is recorded in the project.
   };

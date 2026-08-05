@@ -70,8 +70,10 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
-  // TODO: add `verification: { google: "…", other: { "msvalidate.01": "…" } }`
-  // once Search Console and Bing Webmaster Tools issue their codes.
+  // No `verification` block on purpose. Search Console ownership is already
+  // established outside the app, so a google-site-verification meta tag here
+  // would be redundant; Bing Webmaster is deferred. Add a `verification` key
+  // only if a future method actually requires the meta-tag route.
 };
 
 export default function RootLayout({

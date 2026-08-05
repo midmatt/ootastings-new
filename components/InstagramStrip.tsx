@@ -1,7 +1,14 @@
 import Reveal from "./Reveal";
+import { INSTAGRAM_URL } from "@/lib/seo";
 
 export const INSTAGRAM_HANDLE = "@evootastings";
-export const INSTAGRAM_URL = "https://www.instagram.com/evootastings/";
+
+/**
+ * Re-exported so existing importers (Footer) keep working, but the value is
+ * defined once in lib/seo.ts — the same constant feeds `sameAs` in the
+ * Organization schema, and the two must not be able to drift apart.
+ */
+export { INSTAGRAM_URL };
 
 function InstagramGlyph({ className = "" }: { className?: string }) {
   return (
