@@ -25,6 +25,7 @@ import {
   CONTACT_PHONE_E164,
   INSTAGRAM_URL,
   PARENT_ORG,
+  PARENT_ORG_URL,
   SERVICE_AREA,
   SITE_NAME,
   SITE_URL,
@@ -34,6 +35,8 @@ import {
 
 const ORG_ID = `${SITE_URL}/#organization`;
 const SERVICE_ID = `${SITE_URL}/#tasting-service`;
+/** Keyed off the parent's own domain, since the entity is not part of this site. */
+const PARENT_ORG_ID = `${PARENT_ORG_URL}/#organization`;
 
 /** "$5,000" / "$85 per guest" -> 5000 / 85. Returns null if there's no figure. */
 function parsePrice(value: string): number | null {
@@ -60,7 +63,19 @@ export function organizationSchema() {
     description:
       "Guided olive oil tastings, flights and pairings hosted on location for corporate events, retreats, resorts and private groups.",
     slogan: TAGLINE,
-    parentOrganization: { "@type": "Organization", name: PARENT_ORG },
+    // Confirmed parent/subsidiary relationship, given its own @id so the parent
+    // is a distinct entity rather than a bare string. `subOrganization` back at
+    // this node makes the link explicit in both directions, which is what
+    // schema.org expects for a corporate hierarchy.
+    parentOrganization: {
+      "@type": "Organization",
+      "@id": PARENT_ORG_ID,
+      name: PARENT_ORG,
+      url: PARENT_ORG_URL,
+      subOrganization: { "@id": ORG_ID },
+      // TODO: add the parent's own logo/sameAs if JoVell supplies them — not
+      // recorded in this project, and not worth guessing at from their site.
+    },
     sameAs: [INSTAGRAM_URL],
     contactPoint: {
       "@type": "ContactPoint",

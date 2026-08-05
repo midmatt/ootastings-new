@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { INSTAGRAM_URL } from "./InstagramStrip";
+import { PARENT_ORG } from "@/lib/seo";
 
 /**
  * The same destinations the header carries, plus the booking section and the
@@ -169,6 +170,16 @@ export default function Footer() {
             Sip. Swirl. Taste the Grove.
           </p>
         </div>
+
+        {/*
+          Parent-company attribution. Deliberately sentence case and un-tracked,
+          unlike the uppercase brand lines above it — that reads as a corporate
+          footnote rather than a second brand mark, which is the point: a
+          credibility signal, not co-branding. No JoVell logo or colours here.
+        */}
+        <p className="text-cream/50 mt-6 text-[0.6875rem] leading-relaxed">
+          OOT Tastings is a {PARENT_ORG} company.
+        </p>
       </div>
     </footer>
   );

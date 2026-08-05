@@ -23,8 +23,16 @@ export const SITE_URL = (
 
 export const SITE_NAME = "OOT Tastings";
 
-/** Legal entity behind the brand — named throughout /legal and the footer. */
+/**
+ * Parent company. OOT Tastings is a confirmed subsidiary — /legal states the
+ * Service is "created and operated by JoVell Hospitality Group".
+ *
+ * PARENT_ORG_URL verified live: https://jovellhg.com returns 200 with no
+ * redirect and the site identifies itself as JoVell Hospitality Group
+ * ("Joseph Vella founded JoVell…"). It is the same domain as the group's email.
+ */
 export const PARENT_ORG = "JoVell Hospitality Group";
+export const PARENT_ORG_URL = "https://jovellhg.com";
 
 export const TAGLINE = "Sip. Swirl. Taste the Grove.";
 
