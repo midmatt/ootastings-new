@@ -1,11 +1,37 @@
 import type { Metadata } from "next";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbSchema, graph } from "@/lib/schema";
+import { OG_IMAGE, SITE_NAME } from "@/lib/seo";
+
+/** 53 chars once the layout template appends " | OOT Tastings". */
+const TITLE = "Legal, Privacy & Cancellation Policies";
+const DESCRIPTION =
+  "Privacy policy, terms and conditions, cancellation and refund terms, cookie notice and accessibility statement for OOT Tastings and JoVell Hospitality Group.";
 
 export const metadata: Metadata = {
-  title: "Legal — OOT Tastings",
-  description:
-    "Privacy, terms, cancellation, cookies and accessibility for OOTastings and JoVell Hospitality Group.",
+  // Root layout's template appends " | OOT Tastings".
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: "/legal" },
+  // Repeats siteName/locale because openGraph replaces the layout's rather
+  // than deep-merging.
+  openGraph: {
+    type: "article",
+    siteName: SITE_NAME,
+    locale: "en_US",
+    url: "/legal",
+    title: `${TITLE} | OOT Tastings`,
+    description: DESCRIPTION,
+    images: [OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${TITLE} | OOT Tastings`,
+    description: DESCRIPTION,
+    images: [OG_IMAGE.url],
+  },
 };
 
 /**
@@ -28,6 +54,14 @@ const SECTIONS = [
 export default function LegalPage() {
   return (
     <>
+      <JsonLd
+        data={graph(
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Legal", path: "/legal" },
+          ]),
+        )}
+      />
       <Header />
       <main>
         {/* ---------------- title band ---------------- */}

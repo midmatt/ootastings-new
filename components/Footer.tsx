@@ -120,7 +120,7 @@ export default function Footer() {
         </div>
 
         <div className="border-cream/12 mt-14 flex flex-wrap items-center justify-between gap-6 border-t pt-8">
-          <nav className="flex flex-wrap gap-x-8 gap-y-3">
+          <nav aria-label="Footer" className="flex flex-wrap gap-x-8 gap-y-3">
             {UTILITY_LINKS.map((link) => {
               const className =
                 "text-cream/70 hover:text-cream text-sm transition-colors duration-200";

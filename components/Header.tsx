@@ -102,7 +102,7 @@ export default function Header() {
             </Link>
 
             {/* Desktop nav */}
-            <nav className="hidden items-center gap-9 lg:flex">
+            <nav aria-label="Main" className="hidden items-center gap-9 lg:flex">
               {NAV_LINKS.map((link) => (
                 <a
                   key={link.label}
@@ -171,7 +171,10 @@ export default function Header() {
             menuOpen ? "opacity-100" : "opacity-0"
           }`}
         />
-        <nav className="relative flex h-full flex-col justify-center px-8 pt-24 pb-16">
+        <nav
+          aria-label="Mobile"
+          className="relative flex h-full flex-col justify-center px-8 pt-24 pb-16"
+        >
           {NAV_LINKS.map((link, i) => (
             <a
               key={link.label}

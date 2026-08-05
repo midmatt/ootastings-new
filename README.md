@@ -27,6 +27,34 @@ script). If a local build fails with `Cannot find module for page: /_not-found`,
 `node_modules` is stale from an older Next — `rm -rf node_modules .next && npm
 install` clears it.
 
+## SEO
+
+Metadata is centralised. `lib/seo.ts` holds the canonical origin, share image
+and the business facts that feed structured data; `lib/schema.ts` builds the
+JSON-LD. Per-page titles and descriptions live in each route's `metadata`
+export, and the root layout supplies the `%s | OOT Tastings` title template plus
+the shared Open Graph and Twitter defaults.
+
+- `app/robots.ts` -> `/robots.txt` (allows everything except `/api/`).
+- `app/sitemap.ts` -> `/sitemap.xml`. Only `/` and `/legal` exist; the nav's
+  `#mission`, `#featured` etc. are in-page anchors, not routes, and fragments do
+  not belong in a sitemap. Add entries as real routes land.
+- `public/og-default.png` is a generated 1200x630 brand card. Swap it for
+  photography once real assets are licensed.
+
+**Schema choice:** `Organization` + `Service`, deliberately *not*
+`LocalBusiness`. The tastings are delivered at the client's venue and the
+business has no premises the public visits, so there is no address to publish —
+`Service.areaServed` carries the geography instead. Do not "upgrade" this to
+LocalBusiness/Restaurant without a real, confirmed address; fabricating one
+breaks Google's structured-data policy.
+
+**Canonical domain:** `ootastings.com`, per the redesign spec and the verified
+Resend sending domain. The site currently serves from `ootastings-new.vercel.app`,
+so set `NEXT_PUBLIC_SITE_URL` (see `.env.example`) until the apex domain is
+attached. The www -> apex redirect is a Vercel **Domains** setting, not an
+in-app one — adding it to `next.config.ts` as well risks a redirect loop.
+
 ## Brand system
 
 Tokens live in `app/globals.css` under `@theme` — use the Tailwind classes, not
