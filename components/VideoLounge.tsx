@@ -4,10 +4,14 @@ import Reveal from "./Reveal";
 
 /**
  * OOTastings Video Lounge — two screens between the mission block and the
- * featured experiences. The reels were shot in different orientations, so each
- * frame carries its own aspect ratio and the columns are split 9:16 to match.
- * That split makes the portrait frame exactly as tall as the landscape frame is
- * wide, so the pair reads as one composition instead of two mismatched boxes.
+ * featured experiences. One reel was shot portrait and the other landscape, so
+ * both sit in the same square frame to keep the row even.
+ *
+ * The videos are contained rather than cropped: the promo ends on a card
+ * carrying the JoVell contact details, and a square centre-crop cut the text
+ * off at both edges. Containing costs some letterboxing — symmetric, since a
+ * square frame bars a 9:16 and a 16:9 reel by the same amount — but nothing in
+ * either reel is lost.
  *
  * The heading stays always-visible (not behind scroll-reveal) so the section
  * cannot disappear if the observer is slow or hydration lags. Only the video
@@ -16,17 +20,14 @@ import Reveal from "./Reveal";
 const VIDEOS: {
   title: string;
   src: string;
-  aspect: string;
 }[] = [
   {
     title: "From the Grove",
     src: "/videos/lounge-01.mp4",
-    aspect: "aspect-[9/16]",
   },
   {
     title: "At the Table",
     src: "/videos/lounge-02.mp4",
-    aspect: "aspect-[16/9]",
   },
 ];
 
@@ -50,14 +51,12 @@ export default function VideoLounge() {
           </p>
         </div>
 
-        <div className="mx-auto mt-14 grid max-w-5xl items-center gap-6 sm:mt-16 sm:grid-cols-[9fr_16fr] sm:gap-8">
+        <div className="mx-auto mt-14 grid max-w-4xl gap-6 sm:mt-16 sm:grid-cols-2 sm:gap-8">
           {VIDEOS.map((video, i) => (
             <Reveal key={video.title} delay={i * 120} as="figure">
-              <div
-                className={`rounded-card shadow-soft relative overflow-hidden bg-olive-deep ${video.aspect}`}
-              >
+              <div className="rounded-card shadow-soft relative aspect-square overflow-hidden bg-olive-deep">
                 <video
-                  className="absolute inset-0 h-full w-full object-cover"
+                  className="absolute inset-0 h-full w-full object-contain"
                   src={video.src}
                   controls
                   playsInline
