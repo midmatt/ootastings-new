@@ -180,6 +180,27 @@ export default function Footer() {
         <p className="text-cream/50 mt-6 text-[0.6875rem] leading-relaxed">
           OOT Tastings is a {PARENT_ORG} company.
         </p>
+
+        <div className="border-cream/10 mt-8 flex items-center gap-3 border-t pt-6">
+          <span className="text-cream/45 text-[0.6875rem] tracking-[0.14em] uppercase">
+            Site made by
+          </span>
+          <a
+            href="https://mvella.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="MVella Studios — opens mvella.com"
+            className="opacity-90 transition-opacity duration-200 hover:opacity-100"
+          >
+            <Image
+              src="/mvella-studios.png"
+              alt="MVella Studios"
+              width={120}
+              height={120}
+              className="h-9 w-9 rounded-sm object-cover sm:h-10 sm:w-10"
+            />
+          </a>
+        </div>
       </div>
     </footer>
   );
