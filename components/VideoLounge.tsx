@@ -22,12 +22,12 @@ const VIDEOS: {
   src: string;
 }[] = [
   {
-    title: "From the Grove",
-    src: "/videos/lounge-01.mp4",
-  },
-  {
     title: "At the Table",
     src: "/videos/lounge-02.mp4",
+  },
+  {
+    title: "From the Grove",
+    src: "/videos/lounge-01.mp4",
   },
 ];
 
