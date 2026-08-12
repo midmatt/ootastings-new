@@ -27,25 +27,50 @@ export const heroImage: PlaceholderPhoto = {
 };
 
 /**
- * Section 4 — Featured Tastings coverflow.
+ * Section 4 — Featured Tastings coverflow, now the three tiered experiences.
  *
- * Client-approved names, copy, pricing and package brief. Role titles are per
- * package (Culinary Curator / Wellness Coach / Master Grove Curator) and replace
- * generic "chef" wording in the descriptive copy.
+ * Client-approved tier names, copy, pricing and package brief. Each tier builds
+ * on the one below it, so `includesLabel` carries the "everything in Tier N,
+ * plus" framing and `includes` lists only what that tier adds.
  *
  * `brief` is the condensed hover summary: a couple of sentences plus short
  * scannable lines, not a reproduction of the full comparison table. `note` is
  * optional and the layout has room for another line or two beside it.
  *
- * Culinary pairings are optional add-ons (priced per guest) — not included in
- * the booking fee. Shared tasting inclusions live in `tastingSharedInclusions`
- * and render only in the expanded detail view.
+ * The Culinary Curator Pairings (`culinaryCuratorPairings`) render inside the
+ * "+" brief on every tier; Tier 3 is the tier that includes all three. Shared
+ * inclusions live in `tastingSharedInclusions` and render both as the band
+ * under the carousel and inside the expanded detail view.
  */
 export const tastingSharedInclusions: string[] = [
-  "A selection of dipping breads and artisanal breadsticks, thoughtfully chosen to complement the tasting.",
-  "A small serving of Mediterranean olives at each place setting.",
-  "Alcoholic beverages are provided by the client — our Curated Team is happy to assist with pairing recommendations.",
-  "Travel outside of Florida is billed to the client.",
+  "Curated dipping breads and artisanal breadsticks.",
+  "Mediterranean olives at each place setting.",
+  "Two Signature Olive Oil Pairings.",
+  "Client-provided enhancements: alcoholic beverages, small bites, or food options.",
+  "Pairing and menu guidance from our Curated Team.",
+  "Travel beyond 100 miles from our offices is billed to the client.",
+];
+
+/**
+ * Chef-crafted pairings shown in the "+" brief on each tier card. Tier 3
+ * includes all three; the lower tiers show them as what the journey builds to.
+ */
+export const culinaryCuratorPairings: { name: string; description: string }[] = [
+  {
+    name: "Citrus & Herb Awakening",
+    description:
+      "Bright, aromatic, and refreshing — lemon zest, fresh herbs, and a clean finish that wakes up the palate.",
+  },
+  {
+    name: "Savory Mediterranean Comfort",
+    description:
+      "Warm, savory notes of sun-kissed tomato, roasted garlic, and coastal herbs that highlight olive oil's depth and silkiness.",
+  },
+  {
+    name: "The Culinary Curator's Sweet Drizzle",
+    description:
+      "A playful blend of Signature OO with honey, stone fruit, or floral sweetness — olive oil elevating both savory and sweet.",
+  },
 ];
 
 export const featuredTastings: {
@@ -53,45 +78,55 @@ export const featuredTastings: {
   subtitle: string;
   role: string;
   description: string;
-  duration: string;
+  /** Tier badge shown where the duration pill used to sit. */
+  tier: string;
   price: {
     base: string;
     includes: string;
     additional: string;
-    /** Optional culinary pairings add-on — card + expanded only, not the condensed popup. */
-    optionalPairings: string;
   };
+  /** Short audience line under the pricing block — card + expanded. */
+  highlight: string;
+  /** Heading over the tier's own inclusions, e.g. "Includes everything in Tier 1, plus". */
+  includesLabel: string;
+  includes: string[];
   brief: {
     summary: string;
     lead: string;
     includes: string;
     idealFor: string;
-    addOns: string;
+    addOns?: string;
     note?: string;
   };
   image: PlaceholderPhoto;
 }[] = [
   {
-    name: "Pressed & Paired",
-    subtitle: "The Olive Grove Tasting Menu",
-    role: "Culinary Curator",
+    name: "The Signature OO Tasting",
+    subtitle: "Signature OO, storytelling, and two curated pairings",
+    role: "Curated Team",
     description:
-      "A guided olive oil journey featuring premium Treurer EVOO, Mediterranean-bright storytelling, and three Culinary Curator-crafted pairings (available as an add-on) that introduce guests to a new way of tasting and experiencing flavor.",
-    duration: "45–60 min",
+      "A guided olive oil journey featuring our Signature OO, Mediterranean-bright storytelling, and two curated pairings that introduce guests to a new way of tasting and experiencing flavor. Perfect for intimate groups, executive gatherings, and hospitality-forward activations.",
+    tier: "Tier 1",
     price: {
       base: "$5,000",
       includes: "up to 30 guests",
-      additional: "+$125 per guest after",
-      optionalPairings:
-        "Optional: 3 Culinary Pairings — $82.50/guest (selected by the Curated Team)",
+      additional: "+$40 per guest after 30",
     },
+    highlight: "Ideal for 15–30 guests",
+    includesLabel: "Includes",
+    includes: [
+      "All “Every Tasting Includes” elements",
+      "Two Signature Olive Oil Pairings",
+      "Curated Team pairing guidance",
+      "Ideal for 15–30 guests",
+    ],
     brief: {
       summary:
-        "A guided olive oil journey with premium Treurer EVOO and Mediterranean-bright storytelling — Culinary Curator pairings available as an add-on.",
-      lead: "Culinary Curator",
-      includes: "Premium Treurer EVOO, guided tasting, Mediterranean storytelling",
-      idealFor: "Corporate groups, private events, resorts",
-      addOns: "3 Culinary Pairings, wine pairing, mocktails, gift bottles",
+        "A guided olive oil journey featuring our Signature OO, Mediterranean-bright storytelling, and two curated pairings.",
+      lead: "Curated Team",
+      includes:
+        "Signature OO, guided storytelling, two curated pairings",
+      idealFor: "Intimate groups, executive gatherings, hospitality activations",
     },
     image: {
       src: uns("1653611540493-b3a896319fbf", 1200, 1600),
@@ -99,27 +134,32 @@ export const featuredTastings: {
     },
   },
   {
-    name: "Taste & Thrive",
-    subtitle: "The Olive Oil Wellness Journey",
-    role: "Wellness Coach",
+    name: "The Mediterranean Flavor Experience",
+    subtitle: "Elevated storytelling, upgraded service, deeper engagement",
+    role: "Curated Team",
     description:
-      "A wellness-forward tasting designed for retreats, boutique hotels, and groups seeking a deeper connection to Mediterranean living. Led by our Wellness Coach, this experience blends premium Treurer EVOO, curated pairings, and approachable education on anti-inflammatory benefits, mindful tasting, and the Mediterranean lifestyle. It's flavorful, intentional, and crafted to leave guests feeling nourished, inspired, and connected.",
-    duration: "60–75 min",
+      "A more expansive tasting experience featuring our Signature OO, elevated storytelling, upgraded service elements, and enhanced guest engagement. Designed for mid-size groups, corporate events, and culinary-curious audiences.",
+    tier: "Tier 2",
     price: {
-      base: "$6,000",
-      includes: "includes up to 30 guests",
-      additional: "+$185 per additional guest",
-      optionalPairings:
-        "Optional: 3 Culinary Pairings — $82.50/guest (selected by the Curated Team)",
+      base: "$7,500",
+      includes: "up to 50 guests",
+      additional: "+$45 per guest after 50",
     },
+    highlight: "Designed for mid-size groups and corporate events",
+    includesLabel: "Includes everything in Tier 1, plus",
+    includes: [
+      "Upgraded bread & olive service (premium selections, seasonal additions)",
+      "Enhanced table styling with Mediterranean-bright accents",
+      "A dedicated Curated Team member for pairing guidance and guest engagement",
+      "Priority scheduling for event day logistics",
+    ],
     brief: {
       summary:
-        "A wellness-forward tasting led by our Wellness Coach — premium Treurer EVOO, mindful tasting, and Mediterranean lifestyle education.",
-      lead: "Wellness Coach",
+        "An expansive tasting with elevated storytelling, upgraded service elements, and enhanced guest engagement.",
+      lead: "Dedicated Curated Team member",
       includes:
-        "Premium Treurer EVOO, anti-inflammatory education, mindful tasting guidance",
-      idealFor: "Retreats, boutique hotels, wellness programs",
-      addOns: "3 Culinary Pairings, wellness glow shots, 1:1 sessions",
+        "Upgraded bread & olive service, enhanced table styling, priority scheduling",
+      idealFor: "Mid-size groups, corporate events, culinary-curious audiences",
     },
     image: {
       src: uns("1649825319037-f30ea5b611c7", 1200, 1600),
@@ -127,27 +167,35 @@ export const featuredTastings: {
     },
   },
   {
-    name: "The Grove Master Experience",
-    subtitle: "Premium Mediterranean Pairing Experience",
-    role: "Master Grove Curator & Wellness Coach",
+    name: "The Full Curated Culinary Journey",
+    subtitle: "Our most immersive, sensory-rich olive oil experience",
+    role: "Curated Team",
     description:
-      "Your top-tier tasting — immersive, luxurious, and designed for VIP groups, incentive programs, and high-end private events. Hosted by your Master Grove Curator & Wellness Coach, this experience features a premium EVOO flight, elevated Mediterranean pairings, luxury tablescape styling, and storytelling that transports guests straight into the grove. It's dramatic, sensory, and crafted to redefine what a tasting can be.",
-    duration: "75–90 min",
+      "Our most immersive offering — a hospitality-driven, sensory-rich olive oil experience featuring Signature OO, Mediterranean storytelling, and the full suite of Culinary Curator Pairings. Crafted for large groups, luxury activations, brand events, and high-touch culinary experiences.",
+    tier: "Tier 3",
     price: {
-      base: "$7,500",
-      includes: "includes up to 30 guests",
-      additional: "+$325 per additional guest",
-      optionalPairings:
-        "Optional: 4 Culinary Pairings — $132.50/guest (selected by the Curated Team)",
+      base: "$12,000",
+      includes: "up to 75 guests",
+      additional: "+$50 per guest after 75",
     },
+    highlight: "Crafted for large groups, luxury activations and brand events",
+    includesLabel: "Includes everything in Tier 2, plus",
+    includes: [
+      "All 3 Culinary Curator Pairings included",
+      "Elevated tablescape design inspired by Mediterranean coastal markets",
+      "A three-member Curated Team for guest engagement, pairing guidance, and flow management",
+      "Premium small-bite coordination with client’s catering team",
+      "Custom flavor cards for each guest",
+      "Optional branded takeaways (olive oil minis, tasting cards, etc.)",
+    ],
     brief: {
       summary:
-        "Your top-tier tasting — premium EVOO flight, luxury tablescape, and grove storytelling hosted by your Master Grove Curator & Wellness Coach.",
-      lead: "Master Grove Curator & Wellness Coach",
+        "A hospitality-driven, sensory-rich experience with Signature OO, Mediterranean storytelling, and the full suite of Culinary Curator Pairings.",
+      lead: "Three-member Curated Team",
       includes:
-        "Premium EVOO flight, luxury tablescape styling, immersive grove storytelling",
-      idealFor: "VIP groups, incentive programs, high-end private events",
-      addOns: "4 Culinary Pairings, wine pairings, premium gifts, meet & greet",
+        "All 3 Culinary Curator Pairings, elevated tablescape, custom flavor cards",
+      idealFor: "Large groups, luxury activations, brand events",
+      addOns: "Branded takeaways — olive oil minis, tasting cards and more",
     },
     image: {
       src: uns("1676471926534-d5c9771909fa", 1200, 1600),
@@ -160,9 +208,16 @@ export const featuredTastings: {
  * Section 5 — Enhanced Networking Experiences.
  * Client-approved packages; no duration was supplied for these, so the cards
  * carry no duration badge rather than inventing one.
+ *
+ * `kind` is the experience class (the eyebrow in the expanded panel) and `tag`
+ * the audience descriptor that sits under the card title. `includesFull` and
+ * `enhancements` are lists rather than one run-on line: each tier builds on the
+ * one below it, and the client-provided enhancements are a separate promise —
+ * things the client supplies, not things the package covers.
  */
 export const networkingExperiences: {
   name: string;
+  kind: string;
   tag: string;
   price: string;
   brief: {
@@ -173,24 +228,38 @@ export const networkingExperiences: {
     idealFor: string;
   };
   /** The complete list, shown only in the expanded detail view. */
-  includesFull: string;
+  includesFull: string[];
+  /** Client-provided, so listed apart from what the package includes. */
+  enhancements: string[];
   image: PlaceholderPhoto;
 }[] = [
   {
     name: "The Grove Social Table",
+    kind: "Enhanced Networking Experience",
     tag: "Welcome Receptions & Mixers",
-    price: "$85 per guest",
+    price: "$35 per guest",
     brief: {
       summary:
-        "A warm, inviting networking table inspired by the olive grove.",
+        "A warm, inviting networking table inspired by the olive grove — perfect for receptions, mixers, and events where guests flow, mingle, and connect.",
       lead: "Culinary Curator",
       includes:
-        "Olive branch greenery, warm wood styling, Mediterranean linens, ambient candles",
+        "Olive-branch greenery, warm wood styling, Mediterranean linens, ambient candles, tasting cards",
       idealFor:
-        "Welcome receptions, corporate mixers, resort lobby activations",
+        "Welcome receptions, casual mixers, intimate networking moments",
     },
-    includesFull:
-      "Olive branch greenery + warm wood styling, Mediterranean linens, ambient candles, light tasting bites (optional add-on)",
+    includesFull: [
+      "Olive-branch greenery",
+      "Warm wood styling",
+      "Mediterranean linens",
+      "Ambient candles",
+      "Tasting cards",
+    ],
+    enhancements: [
+      "Small bites or food options",
+      "Alcoholic beverages",
+      "Optional Signature OO Pairings",
+      "Optional Culinary Curator Pairings",
+    ],
     image: {
       src: clientPhoto("a92a6791"),
       alt: "Olive oil tasting menu framed beside a candle and olive greenery",
@@ -198,19 +267,31 @@ export const networkingExperiences: {
   },
   {
     name: "The Mediterranean Market Mixer",
-    tag: "Retreats & Boutique Hotels",
-    price: "$125 per guest",
+    kind: "Immersive Networking Experience",
+    tag: "European Market-Inspired",
+    price: "$45 per guest",
     brief: {
       summary:
-        "A richer, immersive networking experience inspired by European markets.",
+        "A richer, more immersive networking experience inspired by European coastal markets — ideal for elevated receptions, lifestyle activations, and wellness-forward gatherings.",
       lead: "Culinary Curator or Wellness Guide",
       includes:
-        "Everything in Grove Social Table, market-style props, elevated ceramic bowls, branded networking cards",
+        "Everything in the Grove Social Table, market-style props, elevated ceramic bowls, branded networking cards",
       idealFor:
-        "Retreats, boutique hotels, wellness groups, conference lounges",
+        "Lifestyle events, wellness activations, elevated receptions, culinary-curious audiences",
     },
-    includesFull:
-      "Everything in Grove Social Table, market-style props (crates, herbs, lemons, figs), elevated ceramic bowls, seasonal Mediterranean accents, branded networking cards, optional wellness mini-session",
+    includesFull: [
+      "Everything in the Grove Social Table",
+      "Market-style props (crates, herbs, lemons, figs)",
+      "Elevated ceramic bowls",
+      "Seasonal Mediterranean accents",
+      "Branded networking cards",
+      "Optional wellness mini-session",
+    ],
+    enhancements: [
+      "Small bites or food options",
+      "Alcoholic beverages",
+      "Optional Culinary Curator Pairings",
+    ],
     image: {
       src: clientPhoto("a92a6981"),
       alt: "Mediterranean Market Mixer networking table with market-style styling",
@@ -218,17 +299,32 @@ export const networkingExperiences: {
   },
   {
     name: "The Golden Press VIP Networking Lounge",
-    tag: "VIP & Luxury Activations",
-    price: "$225 per guest",
+    kind: "VIP & Luxury Activations",
+    tag: "Premium Networking Experience",
+    price: "$125 per guest",
     brief: {
-      summary: "Your premium, luxury-forward networking activation.",
+      summary:
+        "Your luxury-forward networking activation — a premium, visually stunning, Mediterranean-bright lounge designed for VIP guests, incentive groups, and high-touch hospitality moments.",
       lead: "Master Grove Curator",
       includes:
-        "Premium tablescape, gold-accent vessels, elevated florals, custom branded materials",
+        "Everything in the Mediterranean Market Mixer, premium tablescape, olive green-accent vessels, elevated florals, custom branded materials",
       idealFor: "VIP receptions, incentive groups, luxury resort activations",
     },
-    includesFull:
-      "Everything in Market Mixer, premium tablescape styling, gold-accent tasting vessels, elevated floral + olive branch arrangements, Mediterranean lanterns + luxury candles, custom branded menu or networking cards, optional musician/photographer/premium EVOO gifts",
+    includesFull: [
+      "Everything in the Mediterranean Market Mixer",
+      "Premium tablescape styling",
+      "Olive green-accent tasting vessels",
+      "Elevated floral + olive branch arrangements",
+      "Mediterranean lanterns + luxury candles",
+      "Custom branded menu or networking cards",
+      "Miniature olive oil bottles",
+    ],
+    enhancements: [
+      "Small bites or food options",
+      "Alcoholic beverages",
+      "Optional Signature OO Pairings",
+      "Optional Culinary Curator Pairings",
+    ],
     image: {
       src: clientPhoto("a92a6879"),
       alt: "Golden Press VIP networking lounge with elevated tablescape styling",

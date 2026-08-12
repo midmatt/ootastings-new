@@ -26,6 +26,7 @@ export default function BriefAffordance({
   open,
   setOpen,
   enabled,
+  pairings,
   tone = "on-photo",
   /**
    * How the brief is sized inside its container. The default fills the
@@ -40,6 +41,8 @@ export default function BriefAffordance({
   open: boolean;
   setOpen: (fn: (v: boolean) => boolean) => void;
   enabled: boolean;
+  /** Chef-crafted pairings appended under the brief, tastings only. */
+  pairings?: { name: string; description: string }[];
   tone?: "on-photo" | "on-cream";
   panelClass?: string;
 }) {
@@ -117,13 +120,16 @@ export default function BriefAffordance({
         </span>
       </button>
 
-      {/* Sized against the card itself — same left and right edges, never wider. */}
+      {/* Sized against the card itself — same left and right edges, never wider.
+          Its height is capped against the viewport rather than the card: with
+          the pairings block the brief is taller than a card on a phone, and it
+          is allowed to grow up past the card's top edge rather than clip. */}
       <div
         role="dialog"
         aria-label={`${name} summary`}
         {...hover}
         onClick={(e) => e.stopPropagation()}
-        className={`bg-cream rounded-card absolute bottom-0 z-30 max-h-full origin-bottom p-6 pb-20 shadow-[0_28px_60px_-20px_rgba(15,20,5,0.6)] transition-all duration-250 ease-[var(--ease-brand)] ${panelClass} ${
+        className={`bg-cream rounded-card absolute bottom-0 z-30 max-h-[82vh] origin-bottom overflow-y-auto p-5 pb-18 shadow-[0_28px_60px_-20px_rgba(15,20,5,0.6)] transition-all duration-250 ease-[var(--ease-brand)] sm:p-6 sm:pb-20 ${panelClass} ${
           enabled && open
             ? "pointer-events-auto scale-100 opacity-100"
             : "pointer-events-none scale-95 opacity-0"
@@ -135,7 +141,7 @@ export default function BriefAffordance({
           {brief.summary}
         </p>
 
-        <dl className="border-olive/10 mt-4 grid gap-x-8 gap-y-3 border-t pt-4 sm:grid-cols-2">
+        <dl className="border-olive/10 mt-4 grid gap-x-8 gap-y-2.5 border-t pt-4 sm:grid-cols-2 sm:gap-y-3">
           {field("Led by", brief.lead)}
           {field("Includes", brief.includes)}
           {field("Ideal for", brief.idealFor)}
@@ -148,6 +154,38 @@ export default function BriefAffordance({
             </div>
           )}
         </dl>
+
+        {pairings && pairings.length > 0 && (
+          <div className="border-olive/10 mt-4 border-t pt-4">
+            <p className="text-olive/45 text-[0.625rem] font-semibold tracking-[0.16em] uppercase">
+              Culinary Curator Pairings
+            </p>
+            <p className="text-olive/55 mt-1 font-[family-name:var(--font-fraunces)] text-[0.75rem] leading-snug italic">
+              Chef-crafted. Sensory-forward. Designed to showcase the
+              versatility and beauty of olive oil.
+            </p>
+            <ol className="mt-3 space-y-2 sm:space-y-2.5">
+              {pairings.map((pairing, i) => (
+                <li key={pairing.name} className="flex gap-2.5">
+                  <span
+                    aria-hidden="true"
+                    className="text-terracotta/70 mt-px font-mono text-[0.625rem] font-semibold"
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span>
+                    <span className="text-olive block text-[0.8125rem] leading-snug font-semibold">
+                      {pairing.name}
+                    </span>
+                    <span className="text-olive/60 mt-0.5 block text-[0.6875rem] leading-snug sm:text-[0.75rem]">
+                      {pairing.description}
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
       </div>
     </div>
   );

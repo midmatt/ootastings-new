@@ -49,9 +49,8 @@ export default function ExperienceGrid() {
           </Reveal>
           <Reveal delay={100} className="max-w-sm">
             <p className="text-ink/65 text-[0.9375rem] leading-relaxed">
-              {/* TODO: client copy needed */}
-              Three ways to bring a room together — styled, hosted, and built
-              around the table rather than the queue at the bar.
+              Choose the networking experience that matches your event’s vibe,
+              flow, and level of luxury.
             </p>
           </Reveal>
         </div>
@@ -123,19 +122,21 @@ export default function ExperienceGrid() {
           ))}
           </ul>
 
-          {/* ---------- expanded detail panel ---------- */}
-          <ExpandedDetail
+          {/* ---------- expanded detail panel ----------
+              Absolutely placed rather than sharing the cards' grid cell: in the
+              cell it sized the row even while closed and invisible, leaving a
+              tall band of dead space under the cards. Overlaid it costs no
+              height and covers the cards the way a modal would. */}
+          <div className="pointer-events-none absolute inset-x-0 top-1/2 z-40 flex -translate-y-1/2 justify-center">
+            <ExpandedDetail
               open={isExpanded}
               onClose={closeExpanded}
               image={shown.image}
               index={shownId}
               name={shown.name}
               brief={shown.brief}
-              className="col-start-1 row-start-1 justify-self-center self-center"
             >
-              <p className="eyebrow text-terracotta">
-                Enhanced Networking Experience
-              </p>
+              <p className="eyebrow text-terracotta">{shown.kind}</p>
 
               <h3 className="display text-olive mt-3 text-[clamp(1.75rem,3.4vw,2.9rem)] leading-[1.05] sm:mt-4">
                 {shown.name}
@@ -175,12 +176,43 @@ export default function ExperienceGrid() {
                     {shown.brief.idealFor}
                   </dd>
                 </div>
-                <div className="sm:col-span-2">
+                {/* Two lists side by side: what the package covers, and what
+                    the client brings. Keeping them apart stops a client-provided
+                    enhancement from reading as included. */}
+                <div>
                   <dt className="text-olive/45 text-[0.625rem] font-semibold tracking-[0.16em] uppercase">
                     Includes
                   </dt>
-                  <dd className="text-ink/70 mt-1 text-[0.8125rem] leading-snug">
-                    {shown.includesFull}
+                  <dd className="mt-2">
+                    <ul className="text-ink/70 space-y-1.5 text-[0.8125rem] leading-snug">
+                      {shown.includesFull.map((item) => (
+                        <li key={item} className="flex gap-2.5">
+                          <span
+                            aria-hidden="true"
+                            className="bg-terracotta/80 mt-1.5 h-1 w-1 shrink-0 rounded-full"
+                          />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-olive/45 text-[0.625rem] font-semibold tracking-[0.16em] uppercase">
+                    Enhancements (Client-Provided)
+                  </dt>
+                  <dd className="mt-2">
+                    <ul className="text-ink/70 space-y-1.5 text-[0.8125rem] leading-snug">
+                      {shown.enhancements.map((item) => (
+                        <li key={item} className="flex gap-2.5">
+                          <span
+                            aria-hidden="true"
+                            className="bg-olive/30 mt-1.5 h-1 w-1 shrink-0 rounded-full"
+                          />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </dd>
                 </div>
               </dl>
@@ -196,6 +228,7 @@ export default function ExperienceGrid() {
                 />
               </div>
             </ExpandedDetail>
+          </div>
         </div>
 
         {/* ---------- optional enhancements ---------- */}

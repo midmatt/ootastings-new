@@ -24,6 +24,7 @@ export default function ExpandedDetail({
   badge,
   name,
   brief,
+  pairings,
   className = "",
   children,
 }: {
@@ -35,6 +36,8 @@ export default function ExpandedDetail({
   badge?: string;
   name: string;
   brief: Brief;
+  /** Passed straight through to the brief; tastings only. */
+  pairings?: { name: string; description: string }[];
   className?: string;
   children: React.ReactNode;
 }) {
@@ -57,12 +60,16 @@ export default function ExpandedDetail({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
+  // pointer-events-auto is explicit because a parent may place this inside a
+  // pointer-events-none wrapper to keep it out of that parent's layout flow.
   return (
     <div
       ref={panel}
       aria-hidden={!open}
-      className={`z-40 w-[min(72rem,92vw)] transition-all duration-340 ease-[var(--ease-brand)] ${
-        open ? "scale-100 opacity-100" : "pointer-events-none scale-95 opacity-0"
+      className={`relative z-40 w-[min(72rem,92vw)] transition-all duration-340 ease-[var(--ease-brand)] ${
+        open
+          ? "pointer-events-auto scale-100 opacity-100"
+          : "pointer-events-none scale-95 opacity-0"
       } ${className}`}
     >
       <div className="bg-cream rounded-card shadow-lift relative grid max-h-[86vh] overflow-x-hidden overflow-y-auto md:max-h-none md:grid-cols-[minmax(0,44%)_1fr] md:overflow-hidden">
@@ -92,6 +99,7 @@ export default function ExpandedDetail({
         <BriefAffordance
           name={name}
           brief={brief}
+          pairings={pairings}
           open={infoOpen}
           setOpen={setInfoOpen}
           enabled={open}

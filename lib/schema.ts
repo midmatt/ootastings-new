@@ -138,7 +138,7 @@ export function serviceSchema() {
         itemListElement: featuredTastings.map((t) =>
           offer(
             `${t.name} — ${t.subtitle}`,
-            `${t.brief.summary} ${t.price.includes}, ${t.price.additional}. Duration ${t.duration}.`,
+            `${t.brief.summary} ${t.tier}: ${t.price.includes}, ${t.price.additional}.`,
             t.price.base,
           ),
         ),

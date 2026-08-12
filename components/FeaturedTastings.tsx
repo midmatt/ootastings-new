@@ -5,7 +5,11 @@ import PlaceholderImage from "./PlaceholderImage";
 import AddToPackageButton from "./AddToPackageButton";
 import BriefAffordance from "./BriefAffordance";
 import ExpandedDetail from "./ExpandedDetail";
-import { featuredTastings, tastingSharedInclusions } from "@/lib/placeholders";
+import {
+  culinaryCuratorPairings,
+  featuredTastings,
+  tastingSharedInclusions,
+} from "@/lib/placeholders";
 
 /**
  * Featured Tasting Experiences — a three-card coverflow.
@@ -136,11 +140,17 @@ export default function FeaturedTastings() {
           <div className="flex flex-wrap items-end justify-between gap-8">
             <div className="max-w-2xl">
               <p className="eyebrow text-terracotta-soft mb-5">
-                This Season&apos;s Harvest
+                Our Tiered Experiences
               </p>
               <h2 className="display text-cream text-[clamp(2.1rem,5.5vw,4.25rem)] uppercase">
-                Featured Networking Experiences
+                A Guided Olive Oil Journey
               </h2>
+              <p className="text-cream/70 mt-6 max-w-xl text-[0.9375rem] leading-relaxed">
+                Discover the sensory world of premium olive oil through
+                storytelling, curated pairings, and Mediterranean-bright
+                hospitality. Designed for corporate gatherings, luxury
+                activations, private events, and culinary-curious audiences.
+              </p>
             </div>
 
             <div className="flex items-center gap-3">
@@ -181,7 +191,7 @@ export default function FeaturedTastings() {
             onBlur={() => setHovered(false)}
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
-            className="relative mt-16 grid touch-pan-y place-items-center outline-none [perspective:1800px] md:mt-24"
+            className="relative mt-12 grid touch-pan-y place-items-center outline-none [perspective:1800px] md:mt-24"
           >
             {/* click-outside target while the detail panel is open */}
             <button
@@ -274,7 +284,7 @@ export default function FeaturedTastings() {
                     </span>
 
                     <span className="bg-cream/90 text-olive absolute top-4 right-4 rounded-full px-3.5 py-1.5 text-[0.6875rem] font-semibold tracking-[0.12em] uppercase">
-                      {tasting.duration}
+                      {tasting.tier}
                     </span>
 
                     {/* Still bottom-anchored and content-sized, but capped so it
@@ -299,16 +309,11 @@ export default function FeaturedTastings() {
                         {tasting.price.additional}
                       </p>
                       <p className="text-cream/50 mt-1 line-clamp-2 text-[0.6875rem] leading-snug tracking-[0.04em] sm:line-clamp-none">
-                        {tasting.price.optionalPairings}
+                        {tasting.highlight}
                       </p>
 
-                      {/* The card is a teaser — the expanded panel carries the
-                          description in full, so it is clamped here to what the
-                          card can actually hold at each width. */}
-                      <p className="text-cream/75 mt-2.5 line-clamp-3 text-[0.75rem] leading-[1.5] min-[420px]:line-clamp-5 sm:mt-3 sm:line-clamp-6 sm:text-[0.875rem] sm:leading-[1.6] lg:line-clamp-none">
-                        {tasting.description}
-                      </p>
-
+                      {/* No description here on purpose — the card is a teaser,
+                          and the full copy lives in the expanded panel. */}
                       <span className="bg-terracotta-soft mt-4 block h-px w-10 origin-left transition-transform duration-400 ease-[var(--ease-brand)] group-hover:scale-x-[3.5]" />
                     </div>
                   </div>
@@ -318,6 +323,7 @@ export default function FeaturedTastings() {
                   <BriefAffordance
                     name={tasting.name}
                     brief={tasting.brief}
+                    pairings={culinaryCuratorPairings}
                     open={infoOpen}
                     setOpen={setInfoOpen}
                     enabled={isCenter && !expanded}
@@ -326,23 +332,30 @@ export default function FeaturedTastings() {
               );
             })}
 
-            {/* ---------- expanded detail panel ---------- */}
-            <ExpandedDetail
-              open={expanded}
-              onClose={closeExpanded}
-              image={current.image}
-              index={active}
-              badge={current.duration}
-              name={current.name}
-              brief={current.brief}
-              className="col-start-1 row-start-1"
-            >
+            {/* ---------- expanded detail panel ----------
+                Lifted out of the grid flow. Sharing the cards' cell made the
+                stage as tall as the panel even while it was closed and
+                invisible, which padded dead space above and below the cards —
+                most of it on a phone, where the panel stacks. Absolutely
+                placed it costs no height, and when open it simply overlays the
+                dots the way a modal would. */}
+            <div className="pointer-events-none absolute inset-x-0 top-1/2 z-40 flex -translate-y-1/2 justify-center">
+              <ExpandedDetail
+                open={expanded}
+                onClose={closeExpanded}
+                image={current.image}
+                index={active}
+                badge={current.tier}
+                name={current.name}
+                brief={current.brief}
+                pairings={culinaryCuratorPairings}
+              >
               <div className="flex flex-wrap items-center gap-4">
                 <p className="eyebrow text-terracotta">
                   Featured Tasting Experience
                 </p>
                 <span className="bg-olive/8 text-olive/70 hidden rounded-full px-3 py-1 text-[0.6875rem] font-semibold tracking-[0.12em] uppercase md:inline">
-                  {current.duration}
+                  {current.tier}
                 </span>
               </div>
 
@@ -366,7 +379,7 @@ export default function FeaturedTastings() {
                   {current.price.additional}
                 </span>
                 <span className="text-olive/55 text-[0.8125rem] leading-snug italic">
-                  {current.price.optionalPairings}
+                  {current.highlight}
                 </span>
               </div>
 
@@ -376,10 +389,10 @@ export default function FeaturedTastings() {
 
               <div className="border-olive/10 mt-6 max-w-xl border-t pt-5 sm:mt-7">
                 <p className="text-olive/55 text-[0.6875rem] font-semibold tracking-[0.16em] uppercase">
-                  Every tasting includes
+                  {current.includesLabel}
                 </p>
                 <ul className="text-ink/65 mt-3 space-y-2 text-[0.8125rem] leading-relaxed sm:text-[0.875rem]">
-                  {tastingSharedInclusions.map((item) => (
+                  {current.includes.map((item) => (
                     <li key={item} className="flex gap-2.5">
                       <span
                         aria-hidden="true"
@@ -402,10 +415,11 @@ export default function FeaturedTastings() {
                   }}
                 />
                 <span className="text-olive/45 text-[0.75rem] tracking-[0.12em] uppercase">
-                  Led by {current.brief.lead}
+                  Guided by our Curated Team
                 </span>
               </div>
-            </ExpandedDetail>
+              </ExpandedDetail>
+            </div>
           </div>
 
           {/* Position indicator */}
@@ -428,6 +442,38 @@ export default function FeaturedTastings() {
                 }`}
               />
             ))}
+          </div>
+
+          {/* The foundation under all three tiers. It also lives inside each
+              expanded card, but it is the same for every tier, so it reads
+              once here without opening anything. */}
+          <div className="border-cream/15 mt-16 grid gap-8 border-t pt-12 md:mt-20 md:grid-cols-[minmax(0,17rem)_1fr] md:gap-16">
+            <div>
+              <p className="eyebrow text-terracotta-soft mb-4">
+                What Every Tasting Includes
+              </p>
+              <p className="text-cream/65 text-[0.9375rem] leading-relaxed">
+                A consistent foundation across all tiers — crafted to deliver
+                warmth, hospitality, and Mediterranean brightness.
+              </p>
+            </div>
+            {/* Columns, not a two-column grid: in a grid the rows line up, so
+                one item that wraps to two lines opens a gap beside its
+                shorter neighbour. Columns let each side flow on its own. */}
+            <ul className="sm:columns-2 sm:gap-x-12">
+              {tastingSharedInclusions.map((item) => (
+                <li
+                  key={item}
+                  className="text-cream/75 mb-3.5 flex gap-3 break-inside-avoid text-[0.875rem] leading-relaxed last:mb-0"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="bg-terracotta-soft/80 mt-2.5 h-1 w-1 shrink-0 rounded-full"
+                  />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
