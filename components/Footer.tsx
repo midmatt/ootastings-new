@@ -195,9 +195,9 @@ export default function Footer() {
             <Image
               src="/mvella-studios.png"
               alt="MVella Studios"
-              width={120}
-              height={120}
-              className="h-9 w-9 rounded-sm object-cover sm:h-10 sm:w-10"
+              width={184}
+              height={133}
+              className="h-10 w-auto sm:h-11"
             />
           </a>
         </div>
