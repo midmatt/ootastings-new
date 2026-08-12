@@ -244,11 +244,7 @@ export const optionalEnhancements: {
   {
     group: "Culinary Enhancements",
     items: [
-      {
-        label: "Mediterranean grazing board",
-        price: "$18–$28/guest",
-        note: "Included in Packages 2 & 3",
-      },
+      { label: "Mediterranean grazing board", price: "$18–$28/guest" },
       { label: "Signature mocktail pairing", price: "$30/guest" },
       { label: "Wine pairing upgrade", price: "$55/guest" },
       { label: "Dessert pairing", price: "$12–$18/guest" },
